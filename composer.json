@@ -1,0 +1,24 @@
+{
+    "name": "glue-agency/craft-mediahaven",
+    "description": "A fieldtype that  lets you select assets from MediaHaven",
+    "type": "craft-plugin",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Joren Van Hee",
+            "email": "jorenvanhee@gmail.com"
+        }
+    ],
+    "require": {
+        "craftcms/cms": "^3.0.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "GlueAgency\\MediaHaven\\": "src/"
+        }
+    },
+    "extra": {
+        "handle": "mediahaven",
+        "name": "MediaHaven"
+    }
+}
