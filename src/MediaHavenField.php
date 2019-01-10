@@ -33,11 +33,20 @@ class MediaHavenField extends Field
 
     public function getInputHtml($value, ElementInterface $element = null): string
     {
+        $name = $this->handle;
+        $id = Craft::$app->view->formatInputId($name);
+        $namespacedName = Craft::$app->view->namespaceInputName($name);
+        $namespacedId = Craft::$app->view->namespaceInputId($id);
+
         return Craft::$app->view->renderTemplate(
             'mediahaven/_input', [
                 'field' => $this,
                 'settings' => $this->settings,
                 'value' => $value,
+                'name' => $name,
+                'id' => $id,
+                'namespacedName' => $namespacedName,
+                'namespacedId' => $namespacedId,
             ]
         );
     }

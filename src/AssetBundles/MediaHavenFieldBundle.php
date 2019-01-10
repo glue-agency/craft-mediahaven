@@ -3,6 +3,7 @@
 namespace GlueAgency\MediaHaven\AssetBundles;
 
 use craft\web\AssetBundle;
+use craft\web\assets\garnish\GarnishAsset;
 
 class MediaHavenFieldBundle extends AssetBundle
 {
@@ -10,8 +11,12 @@ class MediaHavenFieldBundle extends AssetBundle
     {
         $this->sourcePath = "@GlueAgency/MediaHaven/AssetBundles/dist";
 
+        $this->depends = [
+            GarnishAsset::class,
+        ];
+
         $this->js = [
-            'test.js',
+            'mediaHavenField.js',
         ];
 
         parent::init();

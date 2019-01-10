@@ -1,3 +1,20 @@
-{% do view.registerAssetBundle('GlueAgency\\MediaHaven\\AssetBundles\\MediaHavenFieldBundle') %}
+{% do view.registerAssetBundle(
+    'GlueAgency\\MediaHaven\\AssetBundles\\MediaHavenFieldBundle'
+) %}
 
-{{ settings.departmentId }}
+<div id="{{ id }}">
+    <input type="hidden" name="{{ name }}">
+    <div class="btn add icon dashed js-add-mediahaven-asset">Add a MediaHaven asset</div>
+    <div class="modal js-mediahaven-field" style="display: none;">
+        MediaHaven field
+    </div>
+</div>
+
+{% set jsSettings = {
+    name: namespacedName,
+    id: namespacedId,
+} %}
+
+{% js %}
+    new MediaHavenField({{ jsSettings|json_encode|raw }});
+{% endjs %}
