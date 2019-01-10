@@ -8,6 +8,14 @@ use Craft;
 
 class MediaHavenField extends Field
 {
+    public $username;
+
+    public $password;
+
+    public $ingestSpaceId;
+
+    public $departmentId;
+
     public static function displayName(): string
     {
         return 'MediaHaven';
@@ -18,6 +26,7 @@ class MediaHavenField extends Field
         return Craft::$app->view->renderTemplate(
             'mediahaven/_settings', [
                 'field' => $this,
+                'settings' => $this->settings,
             ]
         );
     }

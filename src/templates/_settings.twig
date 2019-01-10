@@ -1,1 +1,29 @@
-Settings
+{% import '_includes/forms' as forms %}
+
+{{ forms.textField({
+    label: 'Username',
+    id: 'username',
+    name: 'username',
+    value: settings.username
+}) }}
+
+{{ forms.passwordField({
+    label: 'Password',
+    id: 'password',
+    name: 'password',
+    value: settings.password
+}) }}
+
+{{ forms.textField({
+    label: 'IngestSpaceId',
+    id: 'ingestSpaceId',
+    name: 'ingestSpaceId',
+    value: settings.ingestSpaceId
+}) }}
+
+{{ forms.textField({
+    label: 'DepartmentId',
+    id: 'departmentId',
+    name: 'departmentId',
+    value: settings.departmentId
+}) }}
