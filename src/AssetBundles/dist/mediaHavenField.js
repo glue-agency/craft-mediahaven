@@ -8,7 +8,7 @@ class MediaHavenField {
   }
 
   initModal() {
-    const element = document.querySelector(`#${this.id} .js-mediahaven-field`);
+    const element = document.querySelector(`#${this.id} .js-mediahaven-modal`);
 
     return new Garnish.Modal(element, {
       autoShow: false,
