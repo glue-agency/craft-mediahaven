@@ -35,6 +35,8 @@ class MediaHavenField extends Field
     {
         return Craft::$app->view->renderTemplate(
             'mediahaven/_input', [
+                'field' => $this,
+                'settings' => $this->settings,
                 'value' => $value,
             ]
         );
