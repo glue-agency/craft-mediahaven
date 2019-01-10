@@ -1,8 +1,11 @@
+import render from './render';
+
 class MediaHavenField {
   constructor(settings) {
     this.name = settings.name;
     this.id = settings.id;
     this.modal = this.initModal();
+    this.initialized = false;
 
     this.bindEventListeners();
   }
@@ -22,7 +25,18 @@ class MediaHavenField {
   }
 
   onAddClick() {
+    this.openModal();
+  }
+
+  openModal() {
     this.modal.show();
+
+    if (this.initialized) {
+      return;
+    }
+
+    render(document.querySelector(`.js-mediahaven-app-${this.id}`));
+    this.initialized = true;
   }
 }
 

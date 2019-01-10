@@ -2,7 +2,7 @@ import path from 'path';
 
 export default {
   entry: {
-    mediaHavenField: './resources/js/mediaHavenField.js'
+    mediaHavenField: './resources/js/mediaHavenField/index.js'
   },
   output: {
     filename: 'mediaHavenField.js',
@@ -10,5 +10,16 @@ export default {
     library: 'MediaHavenField',
     libraryTarget: 'window',
     libraryExport: 'default'
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: [
+          'babel-loader',
+        ]
+      }
+    ]
   }
 };

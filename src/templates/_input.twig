@@ -5,8 +5,9 @@
 <div id="{{ id }}">
     <input type="hidden" name="{{ name }}">
     <div class="btn add icon dashed js-add-mediahaven-asset">Add a MediaHaven asset</div>
+    {# Craft's Modal will move this element to the bottom of the page. #}
     <div class="modal js-mediahaven-modal" style="display: none;">
-        MediaHaven field
+        <div class="js-mediahaven-app-{{ namespacedId }}"></div>
     </div>
 </div>
 
