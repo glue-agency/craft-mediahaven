@@ -7,7 +7,7 @@ export default {
   output: {
     filename: 'mediaHavenField.js',
     path: path.resolve(__dirname, 'src/AssetBundles/dist/'),
-    library: 'MediaHavenField',
+    library: 'initializeMediaHavenField',
     libraryTarget: 'window',
     libraryExport: 'default'
   },
