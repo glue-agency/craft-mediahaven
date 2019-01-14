@@ -1,21 +1,16 @@
 import React from 'react';
+import FileRow from './FileRow';
 
 function FilesTable(props) {
-  const { files } = props;
+  const { files, onSelectFile, selectedFile } = props;
 
   const fileRows = files.map((file, index) => (
-    <tr key={index}>
-      <td>
-        <div className="element small hasthumb">
-          <div className="elementthumb">
-            <img src={file.thumbnailImagePath} alt="" />
-          </div>
-          <div className="label">
-            {file.title}
-          </div>
-        </div>
-      </td>
-    </tr>
+    <FileRow
+      key={index}
+      file={file}
+      onSelect={onSelectFile}
+      selected={file === selectedFile}
+    />
   ));
 
   return (
