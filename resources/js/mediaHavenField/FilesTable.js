@@ -8,7 +8,7 @@ function FilesTable(props) {
     <FileRow
       key={index}
       file={file}
-      onSelect={onSelectFile}
+      onSelectFile={onSelectFile}
       selected={file === selectedFile}
       onAddFile={onAddFile}
     />

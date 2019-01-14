@@ -1,10 +1,10 @@
 import React from 'react';
 
 function FileRow(props) {
-  const { file, onSelect, selected, onAddFile } = props;
+  const { file, onSelectFile, selected, onAddFile } = props;
 
   function onRowClick() {
-    onSelect(file);
+    onSelectFile(file);
   }
 
   function onRowDoubleClick() {
