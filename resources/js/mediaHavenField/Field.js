@@ -25,6 +25,12 @@ class MediaHavenField extends React.Component {
     });
   }
 
+  preloadView = () => {
+    this.setState({
+      viewIsAlreadyRendered: true,
+    });
+  }
+
   render() {
     const { isModalVisible, viewIsAlreadyRendered } = this.state;
 
@@ -33,6 +39,7 @@ class MediaHavenField extends React.Component {
         <div
           className="btn add icon dashed"
           onClick={this.openModal}
+          onMouseEnter={this.preloadView}
         >Add a MediaHaven asset</div>
         <Modal visible={isModalVisible} onClickOutside={this.closeModal}>
           {(isModalVisible || viewIsAlreadyRendered) ? (
