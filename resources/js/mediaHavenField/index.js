@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDom from 'react-dom';
-import MediaHavenField from './MediaHavenField';
+import Field from './Field';
 
 function initializeMediaHavenField(settings) {
   ReactDom.render(
-    <MediaHavenField />,
+    <Field />,
     document.querySelector(`#${settings.id}`)
   );
 }

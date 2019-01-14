@@ -1,5 +1,6 @@
 import React from 'react';
 import Modal from './Modal';
+import View from './View';
 
 class MediaHavenField extends React.Component {
   constructor(props) {
@@ -26,9 +27,10 @@ class MediaHavenField extends React.Component {
           onClick={this.toggleModal}
         >Add a MediaHaven asset</div>
         <Modal visible={isModalVisible} onClickOutside={this.toggleModal}>
-          <div class="footer">
-            <div class="buttons right">
-              <div class="btn" onClick={this.toggleModal}>Cancel</div>
+          <View />
+          <div className="footer">
+            <div className="buttons right">
+              <div className="btn" onClick={this.toggleModal}>Cancel</div>
             </div>
           </div>
         </Modal>
