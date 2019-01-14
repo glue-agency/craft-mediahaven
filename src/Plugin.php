@@ -2,6 +2,7 @@
 
 namespace GlueAgency\MediaHaven;
 
+use GlueAgency\MediaHaven\Models\Settings;
 use craft\events\RegisterComponentTypesEvent;
 use craft\events\RegisterUrlRulesEvent;
 use craft\services\Fields;
@@ -31,5 +32,10 @@ class Plugin extends \craft\base\Plugin
                 $event->rules['mediahaven/api/<endpoint:(.*)>'] = 'mediahaven/media-haven-api';
             }
         );
+    }
+
+    protected function createSettingsModel()
+    {
+        return new Settings();
     }
 }

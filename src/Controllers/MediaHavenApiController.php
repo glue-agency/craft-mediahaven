@@ -2,6 +2,7 @@
 
 namespace GlueAgency\MediaHaven\Controllers;
 
+use GlueAgency\MediaHaven\Plugin;
 use GuzzleHttp\Client;
 use craft\web\Controller;
 use Craft;
@@ -9,19 +10,14 @@ use yii\web\Response;
 
 class MediaHavenApiController extends Controller
 {
-    public function plugin()
-    {
-        return Craft::$app->plugins->getPlugin('mediahaven');
-    }
-
     public function actionIndex($endpoint)
     {
+        $settings = $this->plugin()->settings;
+
         $client = new Client([
             'base_uri' => 'https://integration.mediahaven.com/mediahaven-rest-api/',
-            'auth' => ['apikey', 'apikey'],
+            'auth' => [$settings->username, $settings->password],
         ]);
-
-        // todo: get authentication from plugin config
 
         $request = Craft::$app->request;
         $response = Craft::$app->response;
@@ -32,5 +28,10 @@ class MediaHavenApiController extends Controller
         $response->content = $guzzleResponse->getBody()->getContents();
 
         return $response;
+    }
+
+    protected function plugin()
+    {
+        return Plugin::getInstance();
     }
 }
