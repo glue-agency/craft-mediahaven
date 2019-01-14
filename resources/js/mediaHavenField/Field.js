@@ -39,6 +39,12 @@ class MediaHavenField extends React.Component {
   }
 
   addSelectedFile = () => {
+    const { selectedFile } = this.state;
+
+    if (!selectedFile) {
+      return;
+    }
+
     this.setState(prevState => ({
       files: [...prevState.files, prevState.selectedFile],
     }));
