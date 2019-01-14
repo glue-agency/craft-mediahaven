@@ -8,6 +8,7 @@ class View extends React.Component {
 
     this.state = {
       files: [],
+      loading: true,
     }
   }
 
@@ -16,6 +17,7 @@ class View extends React.Component {
       .then((response) => {
         this.setState({
           files: response.data.mediaDataList,
+          loading: false,
         });
       })
       .catch((error) => {
@@ -24,25 +26,29 @@ class View extends React.Component {
   }
   
   render() {
-    const { files } = this.state;
+    const { files, loading } = this.state;
     const { onSelectFile, selectedFile, onAddFile } = this.props;
 
     return (
       <div className="body">
-        <div className="content">
-          <div className="main">
-            <div className="elements">
-              <div className="tableview">
-                <FilesTable
-                  files={files}
-                  onSelectFile={onSelectFile}
-                  selectedFile={selectedFile}
-                  onAddFile={onAddFile}
-                />
+        {loading ? (
+          <div className="spinner big" />
+        ) : (
+          <div className="content">
+            <div className="main">
+              <div className="elements">
+                <div className="tableview">
+                  <FilesTable
+                    files={files}
+                    onSelectFile={onSelectFile}
+                    selectedFile={selectedFile}
+                    onAddFile={onAddFile}
+                  />
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
     );
   }
