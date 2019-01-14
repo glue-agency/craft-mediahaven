@@ -4,7 +4,7 @@ import Field from './Field';
 
 function initializeMediaHavenField(settings) {
   ReactDom.render(
-    <Field />,
+    <Field name={settings.name} />,
     document.querySelector(`#${settings.id}`)
   );
 }

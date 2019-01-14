@@ -62,10 +62,11 @@ class MediaHavenField extends React.Component {
     const {
       isModalVisible, viewIsAlreadyRendered, selectedFile, files
     } = this.state;
+    const { name } = this.props;
 
     return (
       <div className="elementselect">
-        <AddedFiles files={files} onRemoveFile={this.onRemoveFile} />
+        <AddedFiles files={files} onRemoveFile={this.onRemoveFile} fieldName={name} />
         <div
           className="btn add icon dashed"
           onClick={this.openModal}

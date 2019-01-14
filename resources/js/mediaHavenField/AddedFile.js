@@ -1,7 +1,8 @@
 import React from 'react';
+import DataField from './DataField';
 
 function AddedFile(props) {
-  const { file, onRemoveFile } = props;
+  const { file, onRemoveFile, fieldName } = props;
 
   function onRemoveClick() {
     onRemoveFile(file);
@@ -9,6 +10,7 @@ function AddedFile(props) {
 
   return (
     <div className="element large hasthumb removable">
+      <DataField name={fieldName} value={file.mediaObjectId} />
       <div
         className="delete icon"
         title="Remove"
