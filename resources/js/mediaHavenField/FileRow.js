@@ -28,7 +28,7 @@ function FileRow(props) {
         </div>
       </td>
     </tr>
-  )
+  );
 }
 
 export default FileRow;
