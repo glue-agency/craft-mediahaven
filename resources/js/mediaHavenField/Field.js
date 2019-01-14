@@ -38,10 +38,11 @@ class MediaHavenField extends React.Component {
     this.setState({ selectedFile });
   }
 
-  onAddFile = () => {
+  addSelectedFile = () => {
     this.setState(prevState => ({
       files: [...prevState.files, prevState.selectedFile],
     }));
+    this.closeModal();
   }
 
   render() {
@@ -62,6 +63,7 @@ class MediaHavenField extends React.Component {
           <View
             onSelectFile={this.onSelectFile}
             selectedFile={selectedFile}
+            onAddFile={this.addSelectedFile}
           />
           ) : ''}
           <div className="footer">
@@ -69,7 +71,7 @@ class MediaHavenField extends React.Component {
               <div className="btn" onClick={this.closeModal}>Cancel</div>
               <div
                 className={"btn submit " + (!selectedFile ? 'disabled' : '')}
-                onClick={this.onAddFile}
+                onClick={this.addSelectedFile}
               >
                 Select
               </div>

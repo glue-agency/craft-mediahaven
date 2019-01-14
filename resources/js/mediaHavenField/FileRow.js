@@ -1,15 +1,20 @@
 import React from 'react';
 
 function FileRow(props) {
-  const { file, onSelect, selected } = props;
+  const { file, onSelect, selected, onAddFile } = props;
 
   function onRowClick() {
     onSelect(file);
   }
 
+  function onRowDoubleClick() {
+    onAddFile(file);
+  }
+
   return (
     <tr
       onClick={onRowClick}
+      onDoubleClick={onRowDoubleClick}
       className={selected ? 'sel' : ''}
     >
       <td>

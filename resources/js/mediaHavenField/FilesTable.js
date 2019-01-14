@@ -2,7 +2,7 @@ import React from 'react';
 import FileRow from './FileRow';
 
 function FilesTable(props) {
-  const { files, onSelectFile, selectedFile } = props;
+  const { files, onSelectFile, selectedFile, onAddFile } = props;
 
   const fileRows = files.map((file, index) => (
     <FileRow
@@ -10,6 +10,7 @@ function FilesTable(props) {
       file={file}
       onSelect={onSelectFile}
       selected={file === selectedFile}
+      onAddFile={onAddFile}
     />
   ));
 

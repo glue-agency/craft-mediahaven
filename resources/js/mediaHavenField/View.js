@@ -25,7 +25,7 @@ class View extends React.Component {
   
   render() {
     const { files } = this.state;
-    const { onSelectFile, selectedFile } = this.props;
+    const { onSelectFile, selectedFile, onAddFile } = this.props;
 
     return (
       <div className="body">
@@ -37,6 +37,7 @@ class View extends React.Component {
                   files={files}
                   onSelectFile={onSelectFile}
                   selectedFile={selectedFile}
+                  onAddFile={onAddFile}
                 />
               </div>
             </div>
