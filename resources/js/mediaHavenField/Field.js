@@ -8,29 +8,39 @@ class MediaHavenField extends React.Component {
 
     this.state = {
       isModalVisible: false,
+      viewIsAlreadyRendered: false,
     }
   }
 
-  toggleModal = () => {
-    this.setState(prevState => ({
-      isModalVisible: !prevState.isModalVisible,
-    }));
+  openModal = () => {
+    this.setState({
+      isModalVisible: true,
+      viewIsAlreadyRendered: true,
+    });
+  }
+
+  closeModal = () => {
+    this.setState({
+      isModalVisible: false,
+    });
   }
 
   render() {
-    const { isModalVisible } = this.state;
+    const { isModalVisible, viewIsAlreadyRendered } = this.state;
 
     return (
       <div>
         <div
           className="btn add icon dashed"
-          onClick={this.toggleModal}
+          onClick={this.openModal}
         >Add a MediaHaven asset</div>
-        <Modal visible={isModalVisible} onClickOutside={this.toggleModal}>
-          <View />
+        <Modal visible={isModalVisible} onClickOutside={this.closeModal}>
+          {(isModalVisible || viewIsAlreadyRendered) ? (
+            <View />
+          ) : ''}
           <div className="footer">
             <div className="buttons right">
-              <div className="btn" onClick={this.toggleModal}>Cancel</div>
+              <div className="btn" onClick={this.closeModal}>Cancel</div>
             </div>
           </div>
         </Modal>
