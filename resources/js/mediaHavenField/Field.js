@@ -9,6 +9,7 @@ class MediaHavenField extends React.Component {
     this.state = {
       isModalVisible: false,
       viewIsAlreadyRendered: false,
+      selectedFile: null,
     }
   }
 
@@ -31,8 +32,12 @@ class MediaHavenField extends React.Component {
     });
   }
 
+  onSelectFile = (selectedFile) => {
+    this.setState({ selectedFile });
+  }
+
   render() {
-    const { isModalVisible, viewIsAlreadyRendered } = this.state;
+    const { isModalVisible, viewIsAlreadyRendered, selectedFile } = this.state;
 
     return (
       <div>
@@ -43,11 +48,19 @@ class MediaHavenField extends React.Component {
         >Add a MediaHaven asset</div>
         <Modal visible={isModalVisible} onClickOutside={this.closeModal}>
           {(isModalVisible || viewIsAlreadyRendered) ? (
-            <View />
+          <View
+            onSelectFile={this.onSelectFile}
+            selectedFile={selectedFile}
+          />
           ) : ''}
           <div className="footer">
             <div className="buttons right">
               <div className="btn" onClick={this.closeModal}>Cancel</div>
+              <div
+                className={"btn submit " + (!selectedFile ? 'disabled' : '')}
+              >
+                Select
+              </div>
             </div>
           </div>
         </Modal>

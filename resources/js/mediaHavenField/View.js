@@ -8,7 +8,6 @@ class View extends React.Component {
 
     this.state = {
       files: [],
-      selectedFile: null,
     }
   }
 
@@ -23,13 +22,10 @@ class View extends React.Component {
         console.log(error);
       })
   }
-
-  onSelectFile = (selectedFile) => {
-    this.setState({ selectedFile });
-  }
   
   render() {
-    const { files, selectedFile } = this.state;
+    const { files } = this.state;
+    const { onSelectFile, selectedFile } = this.props;
 
     return (
       <div className="body">
@@ -39,7 +35,7 @@ class View extends React.Component {
               <div className="tableview">
                 <FilesTable
                   files={files}
-                  onSelectFile={this.onSelectFile}
+                  onSelectFile={onSelectFile}
                   selectedFile={selectedFile}
                 />
               </div>
