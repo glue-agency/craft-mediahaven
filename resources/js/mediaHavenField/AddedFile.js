@@ -1,10 +1,19 @@
 import React from 'react';
 
 function AddedFile(props) {
-  const { file } = props;
+  const { file, onRemoveFile } = props;
+
+  function onRemoveClick() {
+    onRemoveFile(file);
+  }
 
   return (
-    <div className="element large hasthumb">
+    <div className="element large hasthumb removable">
+      <div
+        className="delete icon"
+        title="Remove"
+        onClick={onRemoveClick}
+      ></div>
       <div className="elementthumb">
         <img src={file.thumbnailImagePath} alt="" />
       </div>

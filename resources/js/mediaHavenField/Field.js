@@ -45,6 +45,19 @@ class MediaHavenField extends React.Component {
     this.closeModal();
   }
 
+  onRemoveFile = (file) => {
+    const { files } = this.state;
+    const newFiles = [...files];
+    const removeIndex = newFiles.indexOf(file);
+
+    if (removeIndex !== -1) {
+      newFiles.splice(removeIndex, 1);
+      this.setState({
+        files: newFiles,
+      });
+    }
+  }
+
   render() {
     const {
       isModalVisible, viewIsAlreadyRendered, selectedFile, files
@@ -52,7 +65,7 @@ class MediaHavenField extends React.Component {
 
     return (
       <div className="elementselect">
-        <AddedFiles files={files} />
+        <AddedFiles files={files} onRemoveFile={this.onRemoveFile} />
         <div
           className="btn add icon dashed"
           onClick={this.openModal}
