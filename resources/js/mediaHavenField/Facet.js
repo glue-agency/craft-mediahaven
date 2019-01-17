@@ -11,8 +11,8 @@ class Facet extends React.Component {
 
   render() {
     const { facet } = this.props;
-    const checkboxElements = facet.value.map(value => (
-      <FacetCheckbox value={value} />
+    const checkboxElements = facet.value.map((value, index) => (
+      <FacetCheckbox key={index} value={value} />
     ));
 
     return (
