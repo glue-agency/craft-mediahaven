@@ -80,11 +80,11 @@ class MediaHavenField extends React.Component {
         >Add a MediaHaven asset</div>
         <Modal visible={isModalVisible} onClickOutside={this.closeModal}>
           {(isModalVisible || viewIsAlreadyRendered) ? (
-          <View
-            onSelectFile={this.onSelectFile}
-            selectedFile={selectedFile}
-            onAddFile={this.addSelectedFile}
-          />
+            <View
+              onSelectFile={this.onSelectFile}
+              selectedFile={selectedFile}
+              onAddFile={this.addSelectedFile}
+            />
           ) : ''}
           <div className="footer">
             <div className="buttons right">
