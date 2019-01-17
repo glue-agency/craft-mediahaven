@@ -3,8 +3,8 @@ import axios from 'axios';
 import FilesTable from './FilesTable';
 import SearchField from './SearchField';
 import Spinner from './Spinner';
-import Facets from './Facets';
 import buildQueryString from './buildQueryString';
+import Facet from './Facet';
 
 class View extends React.Component {
   constructor(props) {
@@ -78,6 +78,9 @@ class View extends React.Component {
   render() {
     const { files, loading, updating, facets } = this.state;
     const { onSelectFile, selectedFile, onAddFile } = this.props;
+    const facetElements = facets.map(facet => (
+      <Facet key={facet.name} facet={facet} />
+    ));
 
     return (
       <div className="body has-sidebar">
@@ -86,7 +89,7 @@ class View extends React.Component {
         ) : (
           <div className="content has-sidebar">
             <div className="sidebar">
-              <Facets facets={facets} />
+              {facetElements}
             </div>
             <div className="main">
               <div className="toolbar">
