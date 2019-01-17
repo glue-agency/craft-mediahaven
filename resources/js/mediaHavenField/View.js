@@ -10,11 +10,37 @@ class View extends React.Component {
     this.state = {
       files: [],
       loading: true,
+      search: '',
     }
   }
 
   componentDidMount() {
-    axios.get('/admin/mediahaven/api/resources/media')
+    this.fetchData();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { search } = this.state;
+
+    if (search !== prevState.search) {
+      this.fetchData();
+    }
+  }
+
+  buildFetchUrl() {
+    const { search } = this.state;
+    let queryString = '';
+
+    if (search) {
+      queryString = `q=+(${search})`;
+    }
+
+    return `/admin/mediahaven/api/resources/media?${queryString}`;
+  }
+
+  fetchData() {
+    const url = this.buildFetchUrl();
+
+    axios.get(url)
       .then((response) => {
         this.setState({
           files: response.data.mediaDataList,
@@ -23,11 +49,11 @@ class View extends React.Component {
       })
       .catch((error) => {
         console.log(error);
-      })
+      });
   }
 
   onSearchUpdate = (search) => {
-    console.log(search);
+    this.setState({ search });
   }
   
   render() {
