@@ -15,11 +15,17 @@ class View extends React.Component {
       loading: true,
       updating: false,
       search: '',
+      facets: [],
     }
   }
 
   componentDidMount() {
-    this.fetchData();
+    Promise.all([
+      this.fetchFiles(),
+      this.fetchFacets(),
+    ]).then(() => {
+      this.setState({ loading: false });
+    });
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -27,22 +33,38 @@ class View extends React.Component {
 
     if (search !== prevState.search) {
       this.setState({ updating: true });
-      this.fetchData();
+      this.fetchFiles();
+      this.fetchFacets();
     }
   }
 
-  fetchData() {
+  fetchFiles() {
     const { search } = this.state;
     const queryString = buildQueryString(search);
     const url = `/admin/mediahaven/api/resources/media?${queryString}`;
 
-    axios.get(url)
+    return axios.get(url)
       .then((response) => {
         this.setState({
           files: response.data.mediaDataList,
-          loading: false,
           updating: false,
         });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  fetchFacets() {
+    const { search } = this.state;
+    const queryString = buildQueryString(search);
+    const url = `/admin/mediahaven/api/resources/facets?${queryString}`;
+
+    return axios.get(url)
+      .then((response) => {
+        this.setState({
+          facets: response.data.facet,
+        })
       })
       .catch((error) => {
         console.log(error);
@@ -54,7 +76,7 @@ class View extends React.Component {
   }
   
   render() {
-    const { files, loading, updating, search } = this.state;
+    const { files, loading, updating, facets } = this.state;
     const { onSelectFile, selectedFile, onAddFile } = this.props;
 
     return (
@@ -64,7 +86,7 @@ class View extends React.Component {
         ) : (
           <div className="content has-sidebar">
             <div className="sidebar">
-              <Facets search={search} />
+              <Facets facets={facets} />
             </div>
             <div className="main">
               <div className="toolbar">

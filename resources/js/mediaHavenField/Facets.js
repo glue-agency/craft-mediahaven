@@ -1,57 +1,17 @@
 import React from 'react';
-import axios from 'axios';
-import buildQueryString from './buildQueryString';
 import Facet from './Facet';
 
-class Facets extends React.Component {
-  constructor(props) {
-    super(props);
+function Facets(props) {
+  const { facets } = props;
+  const facetElements = facets.map(facet => (
+    <Facet key={facet.name} facet={facet} />
+  ));
 
-    this.state = {
-      facets: [],
-    };
-  }
-
-  componentDidMount() {
-    this.fetchData();
-  }
-
-  componentDidUpdate(prevProps) {
-    const { search } = this.props;
-
-    if (search !== prevProps.search) {
-      this.fetchData();
-    }
-  }
-
-  fetchData() {
-    const { search } = this.props;
-    const queryString = buildQueryString(search);
-    const url = `/admin/mediahaven/api/resources/facets?${queryString}`;
-
-    axios.get(url)
-      .then((response) => {
-        this.setState({
-          facets: response.data.facet,
-        })
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
-
-  render() {
-    const { facets } = this.state;
-    const facetElements = facets.map(facet => (
-      <Facet key={facet.name} facet={facet} />
-    ));
-
-    return (
-      <div>
-        {facetElements}
-      </div>
-    );
-  }
+  return (
+    <div>
+      {facetElements}
+    </div>
+  );
 }
 
 export default Facets;
