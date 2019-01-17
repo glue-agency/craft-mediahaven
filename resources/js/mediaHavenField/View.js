@@ -3,6 +3,7 @@ import axios from 'axios';
 import FilesTable from './FilesTable';
 import SearchField from './SearchField';
 import Spinner from './Spinner';
+import Facets from './Facets';
 import buildQueryString from './buildQueryString';
 
 class View extends React.Component {
@@ -63,7 +64,7 @@ class View extends React.Component {
         ) : (
           <div className="content has-sidebar">
             <div className="sidebar">
-              Sidebar
+              <Facets />
             </div>
             <div className="main">
               <div className="toolbar">
