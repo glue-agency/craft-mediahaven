@@ -54,7 +54,7 @@ class View extends React.Component {
   }
   
   render() {
-    const { files, loading, updating } = this.state;
+    const { files, loading, updating, search } = this.state;
     const { onSelectFile, selectedFile, onAddFile } = this.props;
 
     return (
@@ -64,7 +64,7 @@ class View extends React.Component {
         ) : (
           <div className="content has-sidebar">
             <div className="sidebar">
-              <Facets />
+              <Facets search={search} />
             </div>
             <div className="main">
               <div className="toolbar">

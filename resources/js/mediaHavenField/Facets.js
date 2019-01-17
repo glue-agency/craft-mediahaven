@@ -16,6 +16,14 @@ class Facets extends React.Component {
     this.fetchData();
   }
 
+  componentDidUpdate(prevProps) {
+    const { search } = this.props;
+
+    if (search !== prevProps.search) {
+      this.fetchData();
+    }
+  }
+
   fetchData() {
     const { search } = this.props;
     const queryString = buildQueryString(search);
