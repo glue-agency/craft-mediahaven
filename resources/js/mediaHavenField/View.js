@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import FilesTable from './FilesTable';
 import SearchField from './SearchField';
+import Spinner from './Spinner';
 
 class View extends React.Component {
   constructor(props) {
@@ -10,6 +11,7 @@ class View extends React.Component {
     this.state = {
       files: [],
       loading: true,
+      updating: false,
       search: '',
     }
   }
@@ -22,6 +24,7 @@ class View extends React.Component {
     const { search } = this.state;
 
     if (search !== prevState.search) {
+      this.setState({ updating: true });
       this.fetchData();
     }
   }
@@ -45,6 +48,7 @@ class View extends React.Component {
         this.setState({
           files: response.data.mediaDataList,
           loading: false,
+          updating: false,
         });
       })
       .catch((error) => {
@@ -57,7 +61,7 @@ class View extends React.Component {
   }
   
   render() {
-    const { files, loading } = this.state;
+    const { files, loading, updating } = this.state;
     const { onSelectFile, selectedFile, onAddFile } = this.props;
 
     return (
@@ -70,6 +74,7 @@ class View extends React.Component {
               <div className="toolbar">
                 <div className="flex">
                   <SearchField onUpdate={this.onSearchUpdate} />
+                  <Spinner isLoading={updating} />
                 </div>
               </div>
               <div className="elements">
