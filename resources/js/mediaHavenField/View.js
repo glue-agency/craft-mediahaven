@@ -16,6 +16,7 @@ class View extends React.Component {
       updating: false,
       search: '',
       facets: [],
+      activeFacetValues: [],
     }
   }
 
@@ -74,12 +75,36 @@ class View extends React.Component {
   onSearchUpdate = (search) => {
     this.setState({ search });
   }
+
+  onAddFacetValue = (value) => {
+    this.setState(prevState => ({
+      activeFacetValues: [...prevState.activeFacetValues, value],
+    }));
+  }
+
+  onRemoveFacetValue = (value) => {
+    const { activeFacetValues } = this.state;
+    const newValues = [...activeFacetValues];
+    const removeIndex = newValues.indexOf(value);
+
+    if (removeIndex !== -1) {
+      newValues.splice(removeIndex, 1);
+      this.setState({
+        activeFacetValues: newValues,
+      })
+    }
+  }
   
   render() {
     const { files, loading, updating, facets } = this.state;
     const { onSelectFile, selectedFile, onAddFile } = this.props;
     const facetElements = facets.map(facet => (
-      <Facet key={facet.name} facet={facet} />
+      <Facet
+        key={facet.name}
+        facet={facet}
+        onAddFacetValue={this.onAddFacetValue}
+        onRemoveFacetValue={this.onRemoveFacetValue}
+      />
     ));
 
     return (

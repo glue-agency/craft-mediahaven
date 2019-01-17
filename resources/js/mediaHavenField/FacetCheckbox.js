@@ -1,11 +1,15 @@
 import React from 'react';
 
 class FacetCheckbox extends React.Component {
-  constructor(props) {
-    super(props);
+  onChange = (event) => {
+    const { target } = event;
+    const { onAddFacetValue, onRemoveFacetValue, value } = this.props;
 
-    this.state = {
-    };
+    if (target.checked) {
+      onAddFacetValue(value);
+    } else {
+      onRemoveFacetValue(value);
+    }
   }
 
   render() {
@@ -14,7 +18,10 @@ class FacetCheckbox extends React.Component {
     return (
       <div>
         <label>
-          <input type="checkbox" /> {value.label} ({value.count})
+          <input
+            type="checkbox"
+            onChange={this.onChange}
+          /> {value.label} ({value.count})
         </label>
       </div>
     );
