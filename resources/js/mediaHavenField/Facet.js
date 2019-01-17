@@ -1,4 +1,5 @@
 import React from 'react';
+import FacetCheckbox from './FacetCheckbox';
 
 class Facet extends React.Component {
   constructor(props) {
@@ -10,9 +11,15 @@ class Facet extends React.Component {
 
   render() {
     const { facet } = this.props;
+    const checkboxElements = facet.value.map(value => (
+      <FacetCheckbox value={value} />
+    ));
 
     return (
-      <div className="heading"><span>{facet.title}</span></div>
+      <div>
+        <div className="heading"><span>{facet.title}</span></div>
+        {checkboxElements}
+      </div>
     );
   }
 }
