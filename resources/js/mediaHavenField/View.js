@@ -57,11 +57,14 @@ class View extends React.Component {
     const { onSelectFile, selectedFile, onAddFile } = this.props;
 
     return (
-      <div className="body">
+      <div className="body has-sidebar">
         {loading ? (
           <div className="spinner big" />
         ) : (
-          <div className="content">
+          <div className="content has-sidebar">
+            <div className="sidebar">
+              Sidebar
+            </div>
             <div className="main">
               <div className="toolbar">
                 <div className="flex">
