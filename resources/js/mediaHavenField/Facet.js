@@ -12,7 +12,7 @@ class Facet extends React.Component {
     const { facet } = this.props;
 
     return (
-      <div>{facet.name}</div>
+      <div className="heading"><span>{facet.title}</span></div>
     );
   }
 }
