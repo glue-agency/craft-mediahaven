@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import FilesTable from './FilesTable';
+import SearchField from './SearchField';
 
 class View extends React.Component {
   constructor(props) {
@@ -24,6 +25,10 @@ class View extends React.Component {
         console.log(error);
       })
   }
+
+  onSearchUpdate = (search) => {
+    console.log(search);
+  }
   
   render() {
     const { files, loading } = this.state;
@@ -36,6 +41,11 @@ class View extends React.Component {
         ) : (
           <div className="content">
             <div className="main">
+              <div className="toolbar">
+                <div className="flex">
+                  <SearchField onUpdate={this.onSearchUpdate} />
+                </div>
+              </div>
               <div className="elements">
                 <div className="tableview">
                   <FilesTable
