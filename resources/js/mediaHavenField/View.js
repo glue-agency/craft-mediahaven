@@ -3,6 +3,7 @@ import axios from 'axios';
 import FilesTable from './FilesTable';
 import SearchField from './SearchField';
 import Spinner from './Spinner';
+import buildQueryString from './buildQueryString';
 
 class View extends React.Component {
   constructor(props) {
@@ -29,19 +30,10 @@ class View extends React.Component {
     }
   }
 
-  buildFetchUrl() {
-    const { search } = this.state;
-    let queryString = '';
-
-    if (search) {
-      queryString = `q=+(${search})`;
-    }
-
-    return `/admin/mediahaven/api/resources/media?${queryString}`;
-  }
-
   fetchData() {
-    const url = this.buildFetchUrl();
+    const { search } = this.state;
+    const queryString = buildQueryString(search);
+    const url = `/admin/mediahaven/api/resources/media?${queryString}`;
 
     axios.get(url)
       .then((response) => {
