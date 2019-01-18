@@ -1,11 +1,11 @@
-function buildQueryString(search) {
-  let queryString = '';
+function buildQueryString(search, activeFacetValues) {
+  const filters = activeFacetValues.map(value => value.atom);
 
   if (search) {
-    queryString = `q=+(${search})`;
+    filters.push(`+(${search})`);
   }
 
-  return queryString;
+  return 'q=' + filters.join(' ');
 }
 
 export default buildQueryString;

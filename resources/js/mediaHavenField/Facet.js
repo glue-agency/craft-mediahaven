@@ -10,15 +10,24 @@ class Facet extends React.Component {
   }
 
   render() {
-    const { facet, onAddFacetValue, onRemoveFacetValue } = this.props;
-    const checkboxElements = facet.value.map((value, index) => (
-      <FacetCheckbox
-        key={index}
-        value={value}
-        onAddFacetValue={onAddFacetValue}
-        onRemoveFacetValue={onRemoveFacetValue}
-      />
-    ));
+    const {
+      facet, onAddFacetValue, onRemoveFacetValue, activeFacetValues
+    } = this.props;
+    const checkboxElements = facet.value.map((value, index) => {
+      const checked = activeFacetValues.some(activeValue => (
+        activeValue.atom === value.atom
+      ));
+
+      return (
+        <FacetCheckbox
+          key={index}
+          value={value}
+          onAddFacetValue={onAddFacetValue}
+          onRemoveFacetValue={onRemoveFacetValue}
+          checked={checked}
+        />
+      );
+    });
 
     return (
       <div>

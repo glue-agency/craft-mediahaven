@@ -30,9 +30,12 @@ class View extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { search } = this.state;
+    const { search, activeFacetValues } = this.state;
 
-    if (search !== prevState.search) {
+    if (
+      search !== prevState.search
+      || activeFacetValues.length !== prevState.activeFacetValues.length
+    ) {
       this.setState({ updating: true });
       this.fetchFiles();
       this.fetchFacets();
@@ -40,8 +43,8 @@ class View extends React.Component {
   }
 
   fetchFiles() {
-    const { search } = this.state;
-    const queryString = buildQueryString(search);
+    const { search, activeFacetValues } = this.state;
+    const queryString = buildQueryString(search, activeFacetValues);
     const url = `/admin/mediahaven/api/resources/media?${queryString}`;
 
     return axios.get(url)
@@ -57,8 +60,8 @@ class View extends React.Component {
   }
 
   fetchFacets() {
-    const { search } = this.state;
-    const queryString = buildQueryString(search);
+    const { search, activeFacetValues } = this.state;
+    const queryString = buildQueryString(search, activeFacetValues);
     const url = `/admin/mediahaven/api/resources/facets?${queryString}`;
 
     return axios.get(url)
@@ -85,7 +88,9 @@ class View extends React.Component {
   onRemoveFacetValue = (value) => {
     const { activeFacetValues } = this.state;
     const newValues = [...activeFacetValues];
-    const removeIndex = newValues.indexOf(value);
+    const removeIndex = newValues.findIndex(newValue => (
+      newValue.atom === value.atom
+    ));
 
     if (removeIndex !== -1) {
       newValues.splice(removeIndex, 1);
@@ -96,7 +101,9 @@ class View extends React.Component {
   }
   
   render() {
-    const { files, loading, updating, facets } = this.state;
+    const {
+      files, loading, updating, facets, activeFacetValues
+    } = this.state;
     const { onSelectFile, selectedFile, onAddFile } = this.props;
     const facetElements = facets.map(facet => (
       <Facet
@@ -104,6 +111,7 @@ class View extends React.Component {
         facet={facet}
         onAddFacetValue={this.onAddFacetValue}
         onRemoveFacetValue={this.onRemoveFacetValue}
+        activeFacetValues={activeFacetValues}
       />
     ));
 

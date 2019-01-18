@@ -13,7 +13,7 @@ class FacetCheckbox extends React.Component {
   }
 
   render() {
-    const { value } = this.props;
+    const { value, checked } = this.props;
 
     return (
       <div>
@@ -21,6 +21,7 @@ class FacetCheckbox extends React.Component {
           <input
             type="checkbox"
             onChange={this.onChange}
+            checked={checked}
           /> {value.label} ({value.count})
         </label>
       </div>
