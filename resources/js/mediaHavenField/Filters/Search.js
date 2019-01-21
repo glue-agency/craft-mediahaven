@@ -12,9 +12,7 @@ class Search extends Filter {
 
   clone() {
     return cloneDeep(this, (original) => {
-      const clone = new Search(original.name);
-      clone.value = original.value;
-      return clone;
+      return new Search(original.name, original.value);
     });
   }
 }

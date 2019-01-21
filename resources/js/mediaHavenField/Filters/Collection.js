@@ -12,9 +12,7 @@ class Collection extends Filter {
 
   clone() {
     return cloneDeep(this, (original) => {
-      const clone = new Collection(original.name);
-      clone.value = original.value;
-      return clone;
+      return new Collection(original.name, original.value);
     });
   }
 }
