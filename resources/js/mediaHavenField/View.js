@@ -5,6 +5,7 @@ import SearchField from './SearchField';
 import Spinner from './Spinner';
 import buildQueryString from './buildQueryString';
 import Facet from './Facet';
+import CollectionSelect from './CollectionSelect';
 
 class View extends React.Component {
   constructor(props) {
@@ -122,6 +123,7 @@ class View extends React.Component {
         ) : (
           <div className="content has-sidebar">
             <div className="sidebar">
+              <CollectionSelect />
               {facetElements}
             </div>
             <div className="main">
