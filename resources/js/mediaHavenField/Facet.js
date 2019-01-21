@@ -1,6 +1,6 @@
 import React from 'react';
 import FacetCheckbox from './FacetCheckbox';
-import FacetValue from './Filters/FacetValue';
+import FacetValueFilter from './Filters/FacetValue';
 
 class Facet extends React.Component {
   constructor(props) {
@@ -16,7 +16,7 @@ class Facet extends React.Component {
     } = this.props;
     const checkboxElements = facet.value.map((value, index) => {
       const checked = filters
-        .filter(filter => filter instanceof FacetValue)
+        .filter(filter => filter instanceof FacetValueFilter)
         .some(filter => filter.value.atom === value.atom);
 
       return (

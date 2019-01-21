@@ -6,9 +6,9 @@ import Spinner from './Spinner';
 import buildQueryString from './buildQueryString';
 import Facet from './Facet';
 import CollectionSelect from './CollectionSelect';
-import Search from './Filters/Search';
-import Collection from './Filters/Collection';
-import FacetValue from './Filters/FacetValue';
+import SearchFilter from './Filters/Search';
+import CollectionFilter from './Filters/Collection';
+import FacetValueFilter from './Filters/FacetValue';
 import signature from './Filters/signature';
 
 class View extends React.Component {
@@ -23,8 +23,8 @@ class View extends React.Component {
       updating: false,
       facets: [],
       filters: [
-        new Search('search'),
-        new Collection('collection'),
+        new SearchFilter('search'),
+        new CollectionFilter('collection'),
       ],
     }
   }
@@ -131,11 +131,11 @@ class View extends React.Component {
   }
 
   onAddFacetValue = (value) => {
-    this.updateFilter(new FacetValue(value.atom, value));
+    this.updateFilter(new FacetValueFilter(value.atom, value));
   }
 
   onRemoveFacetValue = (value) => {
-    this.removeFilter(new FacetValue(value.atom, value));
+    this.removeFilter(new FacetValueFilter(value.atom, value));
   }
 
   onCollectionChange = (collection) => {
