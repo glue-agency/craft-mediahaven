@@ -1,16 +1,16 @@
-function buildQueryString(search, collection, activeFacetValues) {
+function buildQueryString(filters, collection, activeFacetValues) {
   const plusSign = '%2B';
-  const filters = activeFacetValues.map(value => `${plusSign}(${value.atom})`);
+  const params = activeFacetValues.map(value => `${plusSign}(${value.atom})`);
 
-  if (search) {
-    filters.push(`${plusSign}(${search})`);
-  }
+  filters.forEach((filter) => {
+    params.push(filter.urlParam());
+  })
 
   if (collection) {
-    filters.push(`${plusSign}(CollectionsCollection:${collection}*)`);
+    params.push(`${plusSign}(CollectionsCollection:${collection}*)`);
   }
 
-  return 'q=' + filters.join(' ');
+  return 'q=' + params.join(' ');
 }
 
 export default buildQueryString;

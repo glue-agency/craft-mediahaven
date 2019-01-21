@@ -6,6 +6,8 @@ import Spinner from './Spinner';
 import buildQueryString from './buildQueryString';
 import Facet from './Facet';
 import CollectionSelect from './CollectionSelect';
+import Search from './Filters/Search';
+import signature from './Filters/signature';
 
 class View extends React.Component {
   constructor(props) {
@@ -17,10 +19,12 @@ class View extends React.Component {
       files: [],
       loading: true,
       updating: false,
-      search: '',
       facets: [],
       activeFacetValues: [],
       collection: null,
+      filters: [
+        new Search('search'),
+      ],
     }
   }
 
@@ -34,10 +38,10 @@ class View extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { search, collection, activeFacetValues } = this.state;
+    const { collection, activeFacetValues, filters } = this.state;
 
     if (
-      search !== prevState.search
+      signature(filters) !== signature(prevState.filters)
       || activeFacetValues.length !== prevState.activeFacetValues.length
       || collection !== prevState.collection
     ) {
@@ -48,8 +52,8 @@ class View extends React.Component {
   }
 
   fetchFiles() {
-    const { search, collection, activeFacetValues } = this.state;
-    const queryString = buildQueryString(search, collection, activeFacetValues);
+    const { collection, activeFacetValues, filters } = this.state;
+    const queryString = buildQueryString(filters, collection, activeFacetValues);
     const url = `/admin/mediahaven/api/resources/media?${queryString}`;
 
     if (this.cancelTokens.files) {
@@ -75,8 +79,8 @@ class View extends React.Component {
   }
 
   fetchFacets() {
-    const { search, collection, activeFacetValues } = this.state;
-    const queryString = buildQueryString(search, collection, activeFacetValues);
+    const { collection, activeFacetValues, filters } = this.state;
+    const queryString = buildQueryString(filters, collection, activeFacetValues);
     const url = `/admin/mediahaven/api/resources/facets?${queryString}`;
 
     if (this.cancelTokens.facets) {
@@ -100,8 +104,27 @@ class View extends React.Component {
       });
   }
 
+  getFilter(name) {
+    const { filters } = this.state;
+
+    return filters.find(filter => filter.name === name);
+  }
+
+  updateFilter(newFilter) {
+    const { filters } = this.state;
+    const filtersClone = [...filters].filter((filter) => {
+      return filter.name !== newFilter.name;
+    });
+
+    filtersClone.push(newFilter);
+
+    this.setState({ filters: filtersClone });
+  }
+
   onSearchUpdate = (search) => {
-    this.setState({ search });
+    this.updateFilter(
+      this.getFilter('search').setSearch(search)
+    );
   }
 
   onAddFacetValue = (value) => {
