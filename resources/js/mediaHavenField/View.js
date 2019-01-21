@@ -10,6 +10,7 @@ import SearchFilter from './Filters/Search';
 import CollectionFilter from './Filters/Collection';
 import FacetValueFilter from './Filters/FacetValue';
 import signature from './Filters/signature';
+import ActiveFilters from './ActiveFilters';
 
 class View extends React.Component {
   constructor(props) {
@@ -175,6 +176,7 @@ class View extends React.Component {
                   <SearchField onUpdate={this.onSearchUpdate} />
                   <Spinner isLoading={updating} />
                 </div>
+                <ActiveFilters filters={filters} />
               </div>
               <div className="elements">
                 <div className="tableview">

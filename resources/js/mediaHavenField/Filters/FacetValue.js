@@ -6,6 +6,10 @@ class FacetValue extends Filter {
     return `%2B(${this.value.atom})`;
   }
 
+  label() {
+    return this.value.label;
+  }
+
   clone() {
     return cloneDeep(this, (original) => {
       return new FacetValue(original.name, original.value);
