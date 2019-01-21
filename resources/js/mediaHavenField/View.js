@@ -123,7 +123,7 @@ class View extends React.Component {
 
   onSearchUpdate = (search) => {
     this.updateFilter(
-      this.getFilter('search').setSearch(search)
+      this.getFilter('search').setValue(search)
     );
   }
 
@@ -150,7 +150,7 @@ class View extends React.Component {
 
   onCollectionChange = (collection) => {
     this.updateFilter(
-      this.getFilter('collection').setCollection(collection)
+      this.getFilter('collection').setValue(collection)
     );
   }
   

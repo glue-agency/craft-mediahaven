@@ -1,29 +1,19 @@
 import cloneDeep from 'clone-deep';
+import Filter from './Filter';
 
-class Collection {
-  constructor(name) {
-    this.name = name;
-    this.collection = null;
-  }
-
-  setCollection(collection) {
-    const clone = this.clone();
-    clone.collection = collection;
-    return clone;
-  }
-
+class Collection extends Filter {
   urlParam() {
-    if (!this.collection) {
+    if (!this.value) {
       return '';
     }
 
-    return `%2B(CollectionsCollection:${this.collection}*)`;
+    return `%2B(CollectionsCollection:${this.value}*)`;
   }
 
   clone() {
     return cloneDeep(this, (original) => {
       const clone = new Collection(original.name);
-      clone.collection = original.collection;
+      clone.value = original.value;
       return clone;
     });
   }
