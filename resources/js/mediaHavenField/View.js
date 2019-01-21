@@ -11,6 +11,8 @@ class View extends React.Component {
   constructor(props) {
     super(props);
 
+    this.cancelTokens = {};
+
     this.state = {
       files: [],
       loading: true,
@@ -50,7 +52,13 @@ class View extends React.Component {
     const queryString = buildQueryString(search, collection, activeFacetValues);
     const url = `/admin/mediahaven/api/resources/media?${queryString}`;
 
-    return axios.get(url)
+    if (this.cancelTokens.files) {
+      this.cancelTokens.files.cancel();
+    }
+
+    this.cancelTokens.files = axios.CancelToken.source();
+
+    return axios.get(url, { cancelToken: this.cancelTokens.files.token })
       .then((response) => {
         this.setState({
           files: response.data.mediaDataList,
@@ -58,7 +66,11 @@ class View extends React.Component {
         });
       })
       .catch((error) => {
-        console.log(error);
+        if (axios.isCancel(error)) {
+          console.log('Request canceled', error.message);
+        } else {
+          console.log(error);
+        }
       });
   }
 
@@ -67,14 +79,24 @@ class View extends React.Component {
     const queryString = buildQueryString(search, collection, activeFacetValues);
     const url = `/admin/mediahaven/api/resources/facets?${queryString}`;
 
-    return axios.get(url)
+    if (this.cancelTokens.facets) {
+      this.cancelTokens.facets.cancel();
+    }
+
+    this.cancelTokens.facets = axios.CancelToken.source();
+
+    return axios.get(url, { cancelToken: this.cancelTokens.facets.token })
       .then((response) => {
         this.setState({
           facets: response.data.facet,
         })
       })
       .catch((error) => {
-        console.log(error);
+        if (axios.isCancel(error)) {
+          console.log('Request canceled', error.message);
+        } else {
+          console.log(error);
+        }
       });
   }
 
