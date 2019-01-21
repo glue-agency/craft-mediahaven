@@ -1,12 +1,13 @@
 function buildQueryString(search, collection, activeFacetValues) {
-  const filters = activeFacetValues.map(value => value.atom);
+  const plusSign = '%2B';
+  const filters = activeFacetValues.map(value => `${plusSign}(${value.atom})`);
 
   if (search) {
-    filters.push(`+(${search})`);
+    filters.push(`${plusSign}(${search})`);
   }
 
   if (collection) {
-    filters.push(`+(CollectionsCollection:${collection}*)`);
+    filters.push(`${plusSign}(CollectionsCollection:${collection}*)`);
   }
 
   return 'q=' + filters.join(' ');
