@@ -18,6 +18,7 @@ class View extends React.Component {
       search: '',
       facets: [],
       activeFacetValues: [],
+      collection: null,
     }
   }
 
@@ -31,11 +32,12 @@ class View extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { search, activeFacetValues } = this.state;
+    const { search, collection, activeFacetValues } = this.state;
 
     if (
       search !== prevState.search
       || activeFacetValues.length !== prevState.activeFacetValues.length
+      || collection !== prevState.collection
     ) {
       this.setState({ updating: true });
       this.fetchFiles();
@@ -44,8 +46,8 @@ class View extends React.Component {
   }
 
   fetchFiles() {
-    const { search, activeFacetValues } = this.state;
-    const queryString = buildQueryString(search, activeFacetValues);
+    const { search, collection, activeFacetValues } = this.state;
+    const queryString = buildQueryString(search, collection, activeFacetValues);
     const url = `/admin/mediahaven/api/resources/media?${queryString}`;
 
     return axios.get(url)
@@ -61,8 +63,8 @@ class View extends React.Component {
   }
 
   fetchFacets() {
-    const { search, activeFacetValues } = this.state;
-    const queryString = buildQueryString(search, activeFacetValues);
+    const { search, collection, activeFacetValues } = this.state;
+    const queryString = buildQueryString(search, collection, activeFacetValues);
     const url = `/admin/mediahaven/api/resources/facets?${queryString}`;
 
     return axios.get(url)
@@ -100,6 +102,10 @@ class View extends React.Component {
       })
     }
   }
+
+  onCollectionChange = (collection) => {
+    this.setState({ collection });
+  }
   
   render() {
     const {
@@ -123,7 +129,7 @@ class View extends React.Component {
         ) : (
           <div className="content has-sidebar">
             <div className="sidebar">
-              <CollectionSelect />
+              <CollectionSelect onChange={this.onCollectionChange} />
               {facetElements}
             </div>
             <div className="main">

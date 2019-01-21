@@ -26,6 +26,12 @@ class CollectionSelect extends React.Component {
       });
   }
 
+  onChange = (event) => {
+    const { onChange } = this.props;
+
+    onChange(event.target.value || null);
+  }
+
   render() {
     const { collections, loading } = this.state;
     const optionElements = collections.map(collection => (
@@ -41,8 +47,8 @@ class CollectionSelect extends React.Component {
       <div>
         <div className="heading"><span>Collection</span></div>
         <div className={"select fullwidth " + (loading ? 'disabled' : '')}>
-          <select disabled={loading}>
-            <option>All collections</option>
+          <select disabled={loading} onChange={this.onChange}>
+            <option value="">All collections</option>
             {optionElements}
           </select>
         </div>
