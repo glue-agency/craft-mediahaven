@@ -1,14 +1,10 @@
-function buildQueryString(filters, collection, activeFacetValues) {
+function buildQueryString(filters, activeFacetValues) {
   const plusSign = '%2B';
   const params = activeFacetValues.map(value => `${plusSign}(${value.atom})`);
 
   filters.forEach((filter) => {
     params.push(filter.urlParam());
   })
-
-  if (collection) {
-    params.push(`${plusSign}(CollectionsCollection:${collection}*)`);
-  }
 
   return 'q=' + params.join(' ');
 }

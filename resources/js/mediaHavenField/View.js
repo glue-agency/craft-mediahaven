@@ -7,6 +7,7 @@ import buildQueryString from './buildQueryString';
 import Facet from './Facet';
 import CollectionSelect from './CollectionSelect';
 import Search from './Filters/Search';
+import Collection from './Filters/Collection';
 import signature from './Filters/signature';
 
 class View extends React.Component {
@@ -21,9 +22,9 @@ class View extends React.Component {
       updating: false,
       facets: [],
       activeFacetValues: [],
-      collection: null,
       filters: [
         new Search('search'),
+        new Collection('collection'),
       ],
     }
   }
@@ -38,12 +39,11 @@ class View extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { collection, activeFacetValues, filters } = this.state;
+    const { activeFacetValues, filters } = this.state;
 
     if (
       signature(filters) !== signature(prevState.filters)
       || activeFacetValues.length !== prevState.activeFacetValues.length
-      || collection !== prevState.collection
     ) {
       this.setState({ updating: true });
       this.fetchFiles();
@@ -52,8 +52,8 @@ class View extends React.Component {
   }
 
   fetchFiles() {
-    const { collection, activeFacetValues, filters } = this.state;
-    const queryString = buildQueryString(filters, collection, activeFacetValues);
+    const { activeFacetValues, filters } = this.state;
+    const queryString = buildQueryString(filters, activeFacetValues);
     const url = `/admin/mediahaven/api/resources/media?${queryString}`;
 
     if (this.cancelTokens.files) {
@@ -79,8 +79,8 @@ class View extends React.Component {
   }
 
   fetchFacets() {
-    const { collection, activeFacetValues, filters } = this.state;
-    const queryString = buildQueryString(filters, collection, activeFacetValues);
+    const { activeFacetValues, filters } = this.state;
+    const queryString = buildQueryString(filters, activeFacetValues);
     const url = `/admin/mediahaven/api/resources/facets?${queryString}`;
 
     if (this.cancelTokens.facets) {
@@ -149,7 +149,9 @@ class View extends React.Component {
   }
 
   onCollectionChange = (collection) => {
-    this.setState({ collection });
+    this.updateFilter(
+      this.getFilter('collection').setCollection(collection)
+    );
   }
   
   render() {
