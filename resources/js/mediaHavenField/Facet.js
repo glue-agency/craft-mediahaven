@@ -1,5 +1,6 @@
 import React from 'react';
 import FacetCheckbox from './FacetCheckbox';
+import FacetValue from './Filters/FacetValue';
 
 class Facet extends React.Component {
   constructor(props) {
@@ -11,12 +12,12 @@ class Facet extends React.Component {
 
   render() {
     const {
-      facet, onAddFacetValue, onRemoveFacetValue, activeFacetValues
+      facet, onAddFacetValue, onRemoveFacetValue, filters
     } = this.props;
     const checkboxElements = facet.value.map((value, index) => {
-      const checked = activeFacetValues.some(activeValue => (
-        activeValue.atom === value.atom
-      ));
+      const checked = filters
+        .filter(filter => filter instanceof FacetValue)
+        .some(filter => filter.value.atom === value.atom);
 
       return (
         <FacetCheckbox

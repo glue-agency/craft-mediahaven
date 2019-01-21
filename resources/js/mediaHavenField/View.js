@@ -8,6 +8,7 @@ import Facet from './Facet';
 import CollectionSelect from './CollectionSelect';
 import Search from './Filters/Search';
 import Collection from './Filters/Collection';
+import FacetValue from './Filters/FacetValue';
 import signature from './Filters/signature';
 
 class View extends React.Component {
@@ -21,7 +22,6 @@ class View extends React.Component {
       loading: true,
       updating: false,
       facets: [],
-      activeFacetValues: [],
       filters: [
         new Search('search'),
         new Collection('collection'),
@@ -39,12 +39,9 @@ class View extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { activeFacetValues, filters } = this.state;
+    const { filters } = this.state;
 
-    if (
-      signature(filters) !== signature(prevState.filters)
-      || activeFacetValues.length !== prevState.activeFacetValues.length
-    ) {
+    if (signature(filters) !== signature(prevState.filters)) {
       this.setState({ updating: true });
       this.fetchFiles();
       this.fetchFacets();
@@ -52,8 +49,8 @@ class View extends React.Component {
   }
 
   fetchFiles() {
-    const { activeFacetValues, filters } = this.state;
-    const queryString = buildQueryString(filters, activeFacetValues);
+    const { filters } = this.state;
+    const queryString = buildQueryString(filters);
     const url = `/admin/mediahaven/api/resources/media?${queryString}`;
 
     if (this.cancelTokens.files) {
@@ -79,8 +76,8 @@ class View extends React.Component {
   }
 
   fetchFacets() {
-    const { activeFacetValues, filters } = this.state;
-    const queryString = buildQueryString(filters, activeFacetValues);
+    const { filters } = this.state;
+    const queryString = buildQueryString(filters);
     const url = `/admin/mediahaven/api/resources/facets?${queryString}`;
 
     if (this.cancelTokens.facets) {
@@ -110,15 +107,21 @@ class View extends React.Component {
     return filters.find(filter => filter.name === name);
   }
 
-  updateFilter(newFilter) {
+  updateFilter(selectedFilter, remove = false) {
     const { filters } = this.state;
     const filtersClone = [...filters].filter((filter) => {
-      return filter.name !== newFilter.name;
+      return filter.name !== selectedFilter.name;
     });
 
-    filtersClone.push(newFilter);
+    if (!remove) {
+      filtersClone.push(selectedFilter);
+    }
 
     this.setState({ filters: filtersClone });
+  }
+
+  removeFilter(oldFilter) {
+    this.updateFilter(oldFilter, true);
   }
 
   onSearchUpdate = (search) => {
@@ -128,24 +131,11 @@ class View extends React.Component {
   }
 
   onAddFacetValue = (value) => {
-    this.setState(prevState => ({
-      activeFacetValues: [...prevState.activeFacetValues, value],
-    }));
+    this.updateFilter(new FacetValue(value.atom, value));
   }
 
   onRemoveFacetValue = (value) => {
-    const { activeFacetValues } = this.state;
-    const newValues = [...activeFacetValues];
-    const removeIndex = newValues.findIndex(newValue => (
-      newValue.atom === value.atom
-    ));
-
-    if (removeIndex !== -1) {
-      newValues.splice(removeIndex, 1);
-      this.setState({
-        activeFacetValues: newValues,
-      })
-    }
+    this.removeFilter(new FacetValue(value.atom, value));
   }
 
   onCollectionChange = (collection) => {
@@ -156,7 +146,7 @@ class View extends React.Component {
   
   render() {
     const {
-      files, loading, updating, facets, activeFacetValues
+      files, loading, updating, facets, filters
     } = this.state;
     const { onSelectFile, selectedFile, onAddFile } = this.props;
     const facetElements = facets.map(facet => (
@@ -165,7 +155,7 @@ class View extends React.Component {
         facet={facet}
         onAddFacetValue={this.onAddFacetValue}
         onRemoveFacetValue={this.onRemoveFacetValue}
-        activeFacetValues={activeFacetValues}
+        filters={filters}
       />
     ));
 

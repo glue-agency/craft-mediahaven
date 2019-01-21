@@ -1,7 +1,7 @@
 class Filter {
-  constructor(name) {
+  constructor(name, value = null) {
     this.name = name;
-    this.value = null;
+    this.value = value;
   }
 
   setValue(value) {
