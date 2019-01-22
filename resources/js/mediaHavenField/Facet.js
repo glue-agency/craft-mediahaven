@@ -14,21 +14,28 @@ class Facet extends React.Component {
     const {
       facet, onAddFacetValue, onRemoveFacetValue, filters
     } = this.props;
-    const checkboxElements = facet.value.map((value, index) => {
-      const checked = filters
-        .filter(filter => filter instanceof FacetValueFilter)
-        .some(filter => filter.value.atom === value.atom);
 
-      return (
-        <FacetCheckbox
-          key={index}
-          value={value}
-          onAddFacetValue={onAddFacetValue}
-          onRemoveFacetValue={onRemoveFacetValue}
-          checked={checked}
-        />
-      );
-    });
+    const checkboxElements = facet.value
+      .map((value, index) => {
+        const checked = filters
+          .filter(filter => filter instanceof FacetValueFilter)
+          .some(filter => filter.value.atom === value.atom);
+
+        return checked ? null : (
+          <FacetCheckbox
+            key={index}
+            value={value}
+            onAddFacetValue={onAddFacetValue}
+            onRemoveFacetValue={onRemoveFacetValue}
+            checked={checked}
+          />
+        );
+      })
+      .filter(element => element);
+
+    if (!checkboxElements.length) {
+      return null;
+    }
 
     return (
       <div>
