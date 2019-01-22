@@ -121,7 +121,7 @@ class View extends React.Component {
     this.setState({ filters: filtersClone });
   }
 
-  removeFilter = (oldFilter) => {
+  removeFilter(oldFilter) {
     this.updateFilter(oldFilter, true);
   }
 
@@ -143,6 +143,16 @@ class View extends React.Component {
     this.updateFilter(
       this.getFilter('collection').setValue(collection)
     );
+  }
+
+  onRemoveActiveFilter = (filter) => {
+    const clearedFilter = filter.clear();
+
+    if (clearedFilter !== false) {
+      return this.updateFilter(clearedFilter);
+    }
+
+    return this.removeFilter(filter);
   }
   
   render() {
@@ -176,7 +186,7 @@ class View extends React.Component {
                   <SearchField onUpdate={this.onSearchUpdate} />
                   <Spinner isLoading={updating} />
                 </div>
-                <ActiveFilters filters={filters} onRemove={this.removeFilter} />
+                <ActiveFilters filters={filters} onRemove={this.onRemoveActiveFilter} />
               </div>
               <div className="elements">
                 <div className="tableview">

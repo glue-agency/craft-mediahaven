@@ -5,6 +5,7 @@ function ActiveFilters(props) {
   const { filters, onRemove } = props;
   const activeFilterElements = filters
     .filter(filter => (typeof filter.label === 'function'))
+    .filter(filter => filter.isActive())
     .map(filter => (
       <ActiveFilter
         key={filter.name}

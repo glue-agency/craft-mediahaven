@@ -10,6 +10,10 @@ class Search extends Filter {
     return `%2B(${this.value})`;
   }
 
+  label() {
+    return `Search: "${this.value}"`;
+  }
+
   clone() {
     return cloneDeep(this, (original) => {
       return new Search(original.name, original.value);

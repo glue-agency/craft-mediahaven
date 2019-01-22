@@ -4,6 +4,14 @@ class Filter {
     this.value = value;
   }
 
+  isActive() {
+    return !!this.value;
+  }
+
+  clear() {
+    return this.setValue(null);
+  }
+
   setValue(value) {
     const clone = this.clone();
     clone.value = value;
