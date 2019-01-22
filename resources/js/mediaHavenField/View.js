@@ -22,6 +22,7 @@ class View extends React.Component {
       files: [],
       loading: true,
       updating: false,
+      updatingFacets: false,
       search: '',
       facets: [],
       filters: [
@@ -46,7 +47,7 @@ class View extends React.Component {
     const { filters } = this.state;
 
     if (signature(filters) !== signature(prevState.filters)) {
-      this.setState({ updating: true });
+      this.setState({ updating: true, updatingFacets: true });
       this.fetchFiles();
       this.fetchFacets();
     }
@@ -94,6 +95,7 @@ class View extends React.Component {
       .then((response) => {
         this.setState({
           facets: response.data.facet,
+          updatingFacets: false,
         })
       })
       .catch((error) => {
@@ -166,7 +168,7 @@ class View extends React.Component {
   
   render() {
     const {
-      files, loading, updating, facets, filters, search
+      files, loading, updating, updatingFacets, facets, filters, search
     } = this.state;
     const { onSelectFile, selectedFile, onAddFile } = this.props;
     const facetElements = facets.map(facet => (
@@ -187,7 +189,9 @@ class View extends React.Component {
           <div className="content has-sidebar">
             <div className="sidebar">
               <CollectionSelect onChange={this.onCollectionChange} />
-              {facetElements}
+              <div className={updatingFacets ? 'disabled' : ''}>
+                {facetElements}
+              </div>
             </div>
             <div className="main">
               <div className="toolbar">
