@@ -1,31 +1,23 @@
 import React from 'react';
 
 class SearchField extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      search: '',
-    }
-  }
-
   onChange = (event) => {
+    const { onChange } = this.props;
     const { value } = event.target;
 
-    this.setState({
-      search: value,
-    });
+    onChange(value);
   }
 
   onSubmit = (event) => {
-    const { onUpdate } = this.props;
-    const { search } = this.state;
+    const { onSubmit } = this.props;
 
-    onUpdate(search);
+    onSubmit();
     event.preventDefault();
   }
 
   render() {
+    const { search } = this.props;
+
     return (
       <div className="flex-grow texticon search icon">
         <form onSubmit={this.onSubmit}>
@@ -35,6 +27,7 @@ class SearchField extends React.Component {
             autoComplete="off"
             placeholder="Search"
             onChange={this.onChange}
+            value={search}
           />
         </form>
       </div>

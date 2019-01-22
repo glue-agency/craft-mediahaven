@@ -22,9 +22,12 @@ class View extends React.Component {
       files: [],
       loading: true,
       updating: false,
+      search: '',
       facets: [],
       filters: [
-        new SearchFilter('search'),
+        new SearchFilter('search', null, () => {
+          this.setState({ search: '' });
+        }),
         new CollectionFilter('collection'),
       ],
     }
@@ -125,10 +128,16 @@ class View extends React.Component {
     this.updateFilter(oldFilter, true);
   }
 
-  onSearchUpdate = (search) => {
+  onSearchSubmit = () => {
+    const { search } = this.state;
+
     this.updateFilter(
       this.getFilter('search').setValue(search)
     );
+  }
+
+  onSearchChange = (search) => {
+    this.setState({ search });
   }
 
   onAddFacetValue = (value) => {
@@ -157,7 +166,7 @@ class View extends React.Component {
   
   render() {
     const {
-      files, loading, updating, facets, filters
+      files, loading, updating, facets, filters, search
     } = this.state;
     const { onSelectFile, selectedFile, onAddFile } = this.props;
     const facetElements = facets.map(facet => (
@@ -183,7 +192,11 @@ class View extends React.Component {
             <div className="main">
               <div className="toolbar">
                 <div className="flex">
-                  <SearchField onUpdate={this.onSearchUpdate} />
+                  <SearchField
+                    onSubmit={this.onSearchSubmit}
+                    onChange={this.onSearchChange}
+                    search={search}
+                  />
                   <Spinner isLoading={updating} />
                 </div>
                 <ActiveFilters filters={filters} onRemove={this.onRemoveActiveFilter} />

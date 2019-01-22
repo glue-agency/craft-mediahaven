@@ -16,7 +16,7 @@ class FacetValue extends Filter {
 
   clone() {
     return cloneDeep(this, (original) => {
-      return new FacetValue(original.name, original.value);
+      return new FacetValue(original.name, original.value, original.onClear);
     });
   }
 }

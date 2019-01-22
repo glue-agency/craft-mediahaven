@@ -16,7 +16,7 @@ class Search extends Filter {
 
   clone() {
     return cloneDeep(this, (original) => {
-      return new Search(original.name, original.value);
+      return new Search(original.name, original.value, original.onClear);
     });
   }
 }
