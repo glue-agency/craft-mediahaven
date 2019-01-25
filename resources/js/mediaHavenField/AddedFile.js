@@ -10,17 +10,17 @@ function AddedFile(props) {
 
   return (
     <div className="element large hasthumb removable">
-      <DataField name={fieldName} value={file.mediaObjectId} />
+      <DataField name={fieldName} value={file.id} />
       <div
         className="delete icon"
         title="Remove"
         onClick={onRemoveClick}
       ></div>
       <div className="elementthumb">
-        <img src={file.thumbnailImagePath} alt="" />
+        <img src={file.thumb} alt="" />
       </div>
       <div className="label">
-        <span className="title">{file.title}</span>
+        <span className="title">{file.filename}</span>
       </div>
     </div>
   );

@@ -30,6 +30,7 @@ class Plugin extends \craft\base\Plugin
             UrlManager::EVENT_REGISTER_CP_URL_RULES,
             function (RegisterUrlRulesEvent $event) {
                 $event->rules['mediahaven/api/<endpoint:(.*)>'] = 'mediahaven/media-haven-api';
+                $event->rules['mediahaven/assets'] = 'mediahaven/assets/store';
             }
         );
     }
