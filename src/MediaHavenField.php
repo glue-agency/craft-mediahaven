@@ -3,10 +3,10 @@
 namespace GlueAgency\MediaHaven;
 
 use craft\base\ElementInterface;
-use craft\base\Field;
+use craft\fields\Assets;
 use Craft;
 
-class MediaHavenField extends Field
+class MediaHavenField extends Assets
 {
     public $username;
 
@@ -15,6 +15,21 @@ class MediaHavenField extends Field
     public $ingestSpaceId;
 
     public $departmentId;
+
+    /**
+     * @inheritdoc
+     */
+    public $useSingleFolder;
+
+    /**
+     * @inheritdoc
+     */
+    public $singleUploadLocationSource;
+
+    /**
+     * @inheritdoc
+     */
+    public $singleUploadLocationSubpath;
 
     public static function displayName(): string
     {

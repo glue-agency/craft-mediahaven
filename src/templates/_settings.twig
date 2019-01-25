@@ -1,15 +1,60 @@
+{% extends "_components/fieldtypes/elementfieldsettings" %}
+
 {% import '_includes/forms' as forms %}
 
-{{ forms.textField({
-    label: 'IngestSpaceId',
-    id: 'ingestSpaceId',
-    name: 'ingestSpaceId',
-    value: settings.ingestSpaceId
-}) }}
+{% macro uploadLocationInput(name, field, inputSourceOptions) %}
+    {% from "_includes/forms" import select, text %}
+    <div class="flex">
+        <div>
+            {{ select({
+                id: name~'Source',
+                name: name~'Source',
+                options: inputSourceOptions,
+                value: field[name~'Source'],
+            }) }}
+        </div>
+        <div class="flex-grow">
+            {{ text({
+                id: name~'Subpath',
+                class: 'ltr',
+                name: name~'Subpath',
+                value: field[name~'Subpath'],
+                placeholder: "path/to/subfolder"|t('app')
+            }) }}
+        </div>
+    </div>
+{% endmacro %}
 
-{{ forms.textField({
-    label: 'DepartmentId',
-    id: 'departmentId',
-    name: 'departmentId',
-    value: settings.departmentId
-}) }}
+{% from _self import uploadLocationInput %}
+
+{% block fieldSettings %}
+    {{ forms.textField({
+        label: 'IngestSpaceId',
+        id: 'ingestSpaceId',
+        name: 'ingestSpaceId',
+        value: settings.ingestSpaceId
+    }) }}
+
+    {{ forms.textField({
+        label: 'DepartmentId',
+        id: 'departmentId',
+        name: 'departmentId',
+        value: settings.departmentId
+    }) }}
+
+    {% block uploadLocationFields %}
+        {{ forms.hidden({
+            id: 'useSingleFolder-toggle',
+            name: 'useSingleFolder',
+            value: 1,
+        }) }}
+
+        {% set uploadLocationNote = "Note that the subfolder path can contain variables like <code>{slug}</code> or <code>{author.username}</code>."|t('app') %}
+
+        {{ forms.field({
+            label: "Upload Location"|t('app'),
+            instructions: uploadLocationNote,
+            errors: field.getErrors('singleUploadLocationSubpath')
+        }, uploadLocationInput('singleUploadLocation', field, sourceOptions)) }}
+    {% endblock %}
+{% endblock %}
