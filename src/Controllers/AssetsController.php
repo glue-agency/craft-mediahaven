@@ -20,25 +20,14 @@ class AssetsController extends Controller
         $title = $request->post('title');
 
         $tempFilePath = $this->moveFileToTempFolder($imagePath, $originalFileName);
-
         $volume = Craft::$app->volumes->getAllVolumes()[0];
-
         $filename = Assets::prepareAssetName($originalFileName);
-
         $folderId = Craft::$app->assets->ensureFolderByFullPathAndVolume(
             '',
             $volume
         );
 
-        $asset = new Asset();
-        $asset->tempFilePath = $tempFilePath;
-        $asset->filename = $filename;
-        $asset->newFolderId = $folderId;
-        $asset->volumeId = $volume->id;
-        $asset->avoidFilenameConflicts = true;
-        $asset->setScenario(Asset::SCENARIO_CREATE);
-
-        $result = Craft::$app->elements->saveElement($asset);
+        $asset = $this->createAsset($tempFilePath, $filename, $folderId, $volume->id);
 
         return $this->asJson([
             'id' => $asset->id,
@@ -61,5 +50,18 @@ class AssetsController extends Controller
         file_put_contents($targetPath, $fileHandle);
 
         return $targetPath;
+    }
+
+    protected function createAsset($tempFilePath, $filename, $folderId, $volumeId)
+    {
+        $asset = new Asset();
+        $asset->tempFilePath = $tempFilePath;
+        $asset->filename = $filename;
+        $asset->newFolderId = $folderId;
+        $asset->volumeId = $volumeId;
+        $asset->avoidFilenameConflicts = true;
+        $asset->setScenario(Asset::SCENARIO_CREATE);
+
+        return Craft::$app->elements->saveElement($asset) ? $asset : false;
     }
 }
