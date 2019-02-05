@@ -8,11 +8,13 @@ class MediaHavenField extends React.Component {
   constructor(props) {
     super(props);
 
+    const { files } = props;
+
     this.state = {
       isModalVisible: false,
       viewIsAlreadyRendered: false,
       selectedFile: null,
-      files: [],
+      files: files,
       processingFiles: [],
     }
   }

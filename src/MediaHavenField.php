@@ -52,6 +52,14 @@ class MediaHavenField extends Assets
         $id = Craft::$app->view->formatInputId($name);
         $namespacedName = Craft::$app->view->namespaceInputName($name);
         $namespacedId = Craft::$app->view->namespaceInputId($id);
+        $files = array_map(function ($asset) {
+            return [
+                'id' => $asset->id,
+                'filename' => $asset->filename,
+                'title' => $asset->title,
+                'thumb' => $asset->getThumbUrl(200),
+            ];
+        }, $element->{$name}->all());
 
         return Craft::$app->view->renderTemplate(
             'mediahaven/_input', [
@@ -62,6 +70,7 @@ class MediaHavenField extends Assets
                 'id' => $id,
                 'namespacedName' => $namespacedName,
                 'namespacedId' => $namespacedId,
+                'files' => $files,
             ]
         );
     }
