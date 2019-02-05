@@ -15,7 +15,7 @@ class MediaHavenApiController extends Controller
         $settings = $this->plugin()->settings;
 
         $client = new Client([
-            'base_uri' => 'https://integration.mediahaven.com/mediahaven-rest-api/',
+            'base_uri' => $settings->endpoint,
             'auth' => [$settings->username, $settings->password],
         ]);
 
