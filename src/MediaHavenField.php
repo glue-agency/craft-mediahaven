@@ -2,12 +2,15 @@
 
 namespace GlueAgency\MediaHaven;
 
+use GlueAgency\MediaHaven\Traits\PreparesAssetForJavascript;
 use craft\base\ElementInterface;
 use craft\fields\Assets;
 use Craft;
 
 class MediaHavenField extends Assets
 {
+    use PreparesAssetForJavascript;
+
     public $username;
 
     public $password;
@@ -53,12 +56,7 @@ class MediaHavenField extends Assets
         $namespacedName = Craft::$app->view->namespaceInputName($name);
         $namespacedId = Craft::$app->view->namespaceInputId($id);
         $files = array_map(function ($asset) {
-            return [
-                'id' => $asset->id,
-                'filename' => $asset->filename,
-                'title' => $asset->title,
-                'thumb' => $asset->getThumbUrl(200),
-            ];
+            return $this->prepareAssetForJavascript($asset);
         }, $element->{$name}->all());
 
         return Craft::$app->view->renderTemplate(

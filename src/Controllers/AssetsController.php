@@ -2,6 +2,7 @@
 
 namespace GlueAgency\MediaHaven\Controllers;
 
+use GlueAgency\MediaHaven\Traits\PreparesAssetForJavascript;
 use craft\elements\Asset;
 use craft\helpers\FileHelper;
 use craft\helpers\Assets;
@@ -10,6 +11,8 @@ use Craft;
 
 class AssetsController extends Controller
 {
+    use PreparesAssetForJavascript;
+
     public function actionStore()
     {
         $request = Craft::$app->request;
@@ -29,13 +32,9 @@ class AssetsController extends Controller
 
         $asset = $this->createAsset($tempFilePath, $filename, $folderId, $volume->id);
 
-        return $this->asJson([
-            'id' => $asset->id,
-            'filename' => $asset->filename,
-            'title' => $asset->title,
-            'thumb' => $asset->getThumbUrl(200),
-            'mediaObjectId' => $mediaObjectId,
-        ]);
+        return $this->asJson($this->prepareAssetForJavascript($asset, [
+            'mediaObjectId' => $mediaObjectId
+        ]));
     }
 
     protected function moveFileToTempFolder($url, $filename)
