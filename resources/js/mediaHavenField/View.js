@@ -19,6 +19,7 @@ class View extends React.Component {
     super(props);
 
     this.cancelTokens = {};
+    this.scrollContainerRef = React.createRef();
 
     this.state = {
       files: [],
@@ -65,6 +66,10 @@ class View extends React.Component {
     const startIndex = loadMore ? filesOffset + nrOfResults : 0;
     const pagination = `startIndex=${startIndex}&nrOfResults=${nrOfResults}`;
     const url = `/admin/mediahaven/api/resources/media?${pagination}&${queryString}`;
+
+    if (!loadMore) {
+      this.scrollToTop();
+    }
 
     if (this.cancelTokens.files) {
       this.cancelTokens.files.cancel();
@@ -126,6 +131,14 @@ class View extends React.Component {
 
   loadMoreFiles = () => {
     this.fetchFiles(true);
+  }
+
+  scrollToTop() {
+    const el = this.scrollContainerRef.current;
+
+    if (el) {
+      el.scrollTop = 0;
+    }
   }
 
   getFilter(name) {
@@ -214,7 +227,7 @@ class View extends React.Component {
                 {facetElements}
               </div>
             </div>
-            <div className="main">
+            <div className="main" ref={this.scrollContainerRef}>
               <InfiniteScroll
                 initialLoad={false}
                 loader={<SpinnerMore key={0} />}
