@@ -11,6 +11,8 @@ import CollectionFilter from './Filters/Collection';
 import FacetValueFilter from './Filters/FacetValue';
 import signature from './Filters/signature';
 import ActiveFilters from './ActiveFilters';
+import SpinnerMore from './SpinnerMore';
+import InfiniteScroll from 'react-infinite-scroller';
 
 class View extends React.Component {
   constructor(props) {
@@ -31,6 +33,9 @@ class View extends React.Component {
         }),
         new CollectionFilter('collection'),
       ],
+      filesOffset: 0,
+      totalNumberOfFiles: null,
+      hasMoreFiles: false,
     }
   }
 
@@ -53,10 +58,13 @@ class View extends React.Component {
     }
   }
 
-  fetchFiles() {
-    const { filters } = this.state;
+  fetchFiles(loadMore = false) {
+    const { filters, filesOffset } = this.state;
     const queryString = buildQueryString(filters);
-    const url = `/admin/mediahaven/api/resources/media?${queryString}`;
+    const nrOfResults = 25;
+    const startIndex = loadMore ? filesOffset + nrOfResults : 0;
+    const pagination = `startIndex=${startIndex}&nrOfResults=${nrOfResults}`;
+    const url = `/admin/mediahaven/api/resources/media?${pagination}&${queryString}`;
 
     if (this.cancelTokens.files) {
       this.cancelTokens.files.cancel();
@@ -66,9 +74,18 @@ class View extends React.Component {
 
     return axios.get(url, { cancelToken: this.cancelTokens.files.token })
       .then((response) => {
-        this.setState({
-          files: response.data.mediaDataList,
-          updating: false,
+        this.setState((prevState) => {
+          const newFiles = response.data.mediaDataList;
+          const filesOffset = response.data.startIndex;
+          const totalNumberOfFiles = response.data.totalNrOfResults;
+
+          return {
+            files: (loadMore ? [...prevState.files, ...newFiles] : newFiles),
+            filesOffset,
+            totalNumberOfFiles,
+            hasMoreFiles: (filesOffset + nrOfResults) < totalNumberOfFiles,
+            updating: false,
+          };
         });
       })
       .catch((error) => {
@@ -105,6 +122,10 @@ class View extends React.Component {
           console.log(error);
         }
       });
+  }
+
+  loadMoreFiles = () => {
+    this.fetchFiles(true);
   }
 
   getFilter(name) {
@@ -168,7 +189,7 @@ class View extends React.Component {
   
   render() {
     const {
-      files, loading, updating, updatingFacets, facets, filters, search
+      files, loading, updating, updatingFacets, facets, filters, search, hasMoreFiles
     } = this.state;
     const { onSelectFile, selectedFile, onAddFile } = this.props;
     const facetElements = facets.map(facet => (
@@ -194,27 +215,31 @@ class View extends React.Component {
               </div>
             </div>
             <div className="main">
-              <div className="toolbar">
-                <div className="flex">
-                  <SearchField
-                    onSubmit={this.onSearchSubmit}
-                    onChange={this.onSearchChange}
-                    search={search}
-                  />
-                  <Spinner isLoading={updating} />
+              <InfiniteScroll
+                initialLoad={false}
+                loader={<SpinnerMore key={0} />}
+                loadMore={this.loadMoreFiles}
+                hasMore={hasMoreFiles}
+                useWindow={false}
+              >
+                <div className="toolbar">
+                  <div className="flex">
+                    <SearchField
+                      onSubmit={this.onSearchSubmit}
+                      onChange={this.onSearchChange}
+                      search={search}
+                    />
+                    <Spinner isLoading={updating} />
+                  </div>
+                  <ActiveFilters filters={filters} onRemove={this.onRemoveActiveFilter} />
                 </div>
-                <ActiveFilters filters={filters} onRemove={this.onRemoveActiveFilter} />
-              </div>
-              <div className="elements">
-                <div className="tableview">
-                  <FilesTable
-                    files={files}
-                    onSelectFile={onSelectFile}
-                    selectedFile={selectedFile}
-                    onAddFile={onAddFile}
-                  />
-                </div>
-              </div>
+                <FilesTable
+                  files={files}
+                  onSelectFile={onSelectFile}
+                  selectedFile={selectedFile}
+                  onAddFile={onAddFile}
+                />
+              </InfiniteScroll>
             </div>
           </div>
         )}

@@ -15,16 +15,20 @@ function FilesTable(props) {
   ));
 
   return (
-    <table className="data fullwidth">
-      <thead>
-        <tr>
-          <th scope="col">Title</th>
-        </tr>
-      </thead>
-      <tbody>
-        {fileRows}
-      </tbody>
-    </table>
+    <div className="elements">
+      <div className="tableview">
+        <table className="data fullwidth">
+          <thead>
+            <tr>
+              <th scope="col">Title</th>
+            </tr>
+          </thead>
+          <tbody>
+            {fileRows}
+          </tbody>
+        </table>
+      </div>
+    </div>
   );
 }
 
