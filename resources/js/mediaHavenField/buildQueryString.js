@@ -1,6 +1,6 @@
 function buildQueryString(filters) {
   const query = filters
-    .map(filter => filter.urlParam())
+    .map(filter => encodeURIComponent(filter.urlParam()))
     .filter(filter => filter)
     .join(' ');
 
