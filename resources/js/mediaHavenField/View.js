@@ -13,6 +13,7 @@ import signature from './Filters/signature';
 import ActiveFilters from './ActiveFilters';
 import SpinnerMore from './SpinnerMore';
 import InfiniteScroll from 'react-infinite-scroller';
+import PendingProgressBar from './PendingProgressBar';
 
 class View extends React.Component {
   constructor(props) {
@@ -204,7 +205,7 @@ class View extends React.Component {
     const {
       files, loading, updating, updatingFacets, facets, filters, search, hasMoreFiles
     } = this.state;
-    const { onSelectFile, selectedFile, onAddFile } = this.props;
+    const { onSelectFile, selectedFile, onAddFile, isAddingFile } = this.props;
     const facetElements = facets.map(facet => (
       <Facet
         key={facet.name}
@@ -253,6 +254,7 @@ class View extends React.Component {
                   onAddFile={onAddFile}
                 />
               </InfiniteScroll>
+              {isAddingFile && <PendingProgressBar />}
             </div>
           </div>
         )}

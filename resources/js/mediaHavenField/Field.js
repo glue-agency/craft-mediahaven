@@ -11,6 +11,7 @@ class MediaHavenField extends React.Component {
       isModalVisible: false,
       viewIsAlreadyRendered: false,
       selectedFile: null,
+      isAddingFile: false,
     }
   }
 
@@ -65,11 +66,13 @@ class MediaHavenField extends React.Component {
   }
 
   addSelectedFile = () => {
-    const { selectedFile } = this.state;
+    const { selectedFile, isAddingFile } = this.state;
 
-    if (!selectedFile) {
+    if (!selectedFile || isAddingFile) {
       return;
     }
+
+    this.setState({ isAddingFile: true });
 
     const data = new FormData();
     data.append('originalFileName', selectedFile.originalFileName);
@@ -87,6 +90,9 @@ class MediaHavenField extends React.Component {
       })
       .catch((error) => {
         console.log(error);
+      })
+      .then(() => {
+        this.setState({ isAddingFile: false });
       });
 
   }
@@ -96,6 +102,7 @@ class MediaHavenField extends React.Component {
       isModalVisible,
       viewIsAlreadyRendered,
       selectedFile,
+      isAddingFile,
     } = this.state;
 
     return (
@@ -111,13 +118,14 @@ class MediaHavenField extends React.Component {
               onSelectFile={this.onSelectFile}
               selectedFile={selectedFile}
               onAddFile={this.addSelectedFile}
+              isAddingFile={isAddingFile}
             />
           ) : ''}
           <div className="footer">
             <div className="buttons right">
               <div className="btn" onClick={this.closeModal}>Cancel</div>
               <div
-                className={"btn submit " + (!selectedFile ? 'disabled' : '')}
+                className={"btn submit " + (!selectedFile || isAddingFile ? 'disabled' : '')}
                 onClick={this.addSelectedFile}
               >
                 Select
