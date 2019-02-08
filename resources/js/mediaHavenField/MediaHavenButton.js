@@ -3,7 +3,7 @@ import Modal from './Modal';
 import View from './View';
 import axios from 'axios';
 
-class MediaHavenField extends React.Component {
+class MediaHavenButton extends React.Component {
   constructor(props) {
     super(props);
 
@@ -138,4 +138,4 @@ class MediaHavenField extends React.Component {
   }
 }
 
-export default MediaHavenField;
+export default MediaHavenButton;
