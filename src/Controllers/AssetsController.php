@@ -47,7 +47,7 @@ class AssetsController extends Controller
             $uploadLocationSource,
             strpos($uploadLocationSource, ':') + 1
         );
-        $rootFolder = $assets->getFolderById($rootFolderId);
+        $rootFolder = $assets->getFolderByUid($rootFolderId);
 
         $folderId = $assets->ensureFolderByFullPathAndVolume(
             $uploadLocationSubpath,
@@ -58,7 +58,7 @@ class AssetsController extends Controller
             return $rootFolder;
         }
 
-        return $assets->getFolderById($folderId);
+        return $assets->getFolderByUid($folderId);
     }
 
     protected function moveFileToTempFolder($url, $filename)
