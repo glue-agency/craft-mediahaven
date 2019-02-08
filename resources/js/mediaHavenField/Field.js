@@ -1,21 +1,16 @@
 import React from 'react';
 import Modal from './Modal';
 import View from './View';
-import AddedFiles from './AddedFiles';
 import axios from 'axios';
 
 class MediaHavenField extends React.Component {
   constructor(props) {
     super(props);
 
-    const { files } = props;
-
     this.state = {
       isModalVisible: false,
       viewIsAlreadyRendered: false,
       selectedFile: null,
-      files: files,
-      processingFiles: [],
     }
   }
 
@@ -39,51 +34,33 @@ class MediaHavenField extends React.Component {
   }
 
   addFile(file) {
-    this.setState(prevState => ({
-      files: [file, ...prevState.files],
-    }));
+    const element = window.$(
+      this.getMediaHavenReference().selectedFileElement
+    );
+
+    this.getAssetField().selectElements([{
+      $element: element,
+      id: file.id,
+      label: file.title,
+    }]);
   }
 
-  removeFile(file) {
-    const { files } = this.state;
-    const newFiles = [...files];
-    const removeIndex = newFiles.indexOf(file);
-
-    if (removeIndex !== -1) {
-      newFiles.splice(removeIndex, 1);
-      this.setState({ files: newFiles });
-    }
+  getAssetField() {
+    return this.getMediaHavenReference().object;
   }
 
-  addProcessingFile(processingFile) {
-    this.setState(prevState => ({
-      processingFiles: [processingFile, ...prevState.processingFiles],
-    }));
+  getMediaHavenReference() {
+    const { assetFieldId } = this.props;
+
+    return window.mediaHavenReferences.find((reference) => {
+      return reference.key == assetFieldId;
+    });
   }
 
-  removeProcessingFile(processingFile) {
-    const { processingFiles } = this.state;
-    const newProcessingFiles = [...processingFiles];
-    const removeIndex = newProcessingFiles.indexOf(processingFile);
+  onSelectFile = (selectedFile, selectedFileElement) => {
+    const reference = this.getMediaHavenReference();
+    reference.selectedFileElement = selectedFileElement;
 
-    if (removeIndex !== -1) {
-      newProcessingFiles.splice(removeIndex, 1);
-      this.setState({ processingFiles: newProcessingFiles });
-    }
-  }
-
-  removeProcessingFileByMediaObjectId(mediaObjectId) {
-    const { processingFiles } = this.state;
-    const processingFile = processingFiles.find(file => (
-      file.mediaObjectId === mediaObjectId
-    ));
-
-    if (processingFile) {
-      this.removeProcessingFile(processingFile);
-    }
-  }
-
-  onSelectFile = (selectedFile) => {
     this.setState({ selectedFile });
   }
 
@@ -106,18 +83,12 @@ class MediaHavenField extends React.Component {
       })
       .then((response) => {
         this.addFile(response.data);
-        this.removeProcessingFileByMediaObjectId(response.data.mediaObjectId);
+        this.closeModal();
       })
       .catch((error) => {
         console.log(error);
       });
 
-    this.addProcessingFile(selectedFile);
-    this.closeModal();
-  }
-
-  onRemoveFile = (file) => {
-    this.removeFile(file)
   }
 
   render() {
@@ -125,19 +96,10 @@ class MediaHavenField extends React.Component {
       isModalVisible,
       viewIsAlreadyRendered,
       selectedFile,
-      files,
-      processingFiles
     } = this.state;
-    const { name } = this.props;
 
     return (
       <div className="elementselect">
-        <AddedFiles
-          files={files}
-          processingFiles={processingFiles}
-          onRemoveFile={this.onRemoveFile}
-          fieldName={name}
-        />
         <div
           className="btn add icon dashed"
           onClick={this.openModal}

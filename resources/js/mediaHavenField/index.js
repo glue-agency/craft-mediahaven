@@ -4,11 +4,8 @@ import Field from './Field';
 
 function initializeMediaHavenField(settings) {
   ReactDom.render(
-    <Field
-      name={settings.name}
-      files={settings.files}
-    />,
-    document.querySelector(`#${settings.id}`)
+    <Field assetFieldId={settings.assetsFieldId} />,
+    document.querySelector(`[data-mediahaven-field-for="${settings.assetsFieldId}"]`)
   );
 }
 

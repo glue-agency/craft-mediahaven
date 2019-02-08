@@ -2,9 +2,10 @@ import React from 'react';
 
 function FileRow(props) {
   const { file, onSelectFile, selected, onAddFile } = props;
+  const elementDiv = React.createRef();
 
   function onRowClick() {
-    onSelectFile(file);
+    onSelectFile(file, elementDiv.current);
   }
 
   function onRowDoubleClick() {
@@ -18,7 +19,7 @@ function FileRow(props) {
       className={selected ? 'sel' : ''}
     >
       <td>
-        <div className="element small hasthumb">
+        <div className="element small hasthumb" ref={elementDiv}>
           <div className="elementthumb">
             <img src={file.thumbnailImagePath} alt="" />
           </div>
