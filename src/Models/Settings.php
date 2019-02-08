@@ -10,5 +10,5 @@ class Settings extends Model
 
     public $password = 'apikey';
 
-    public $endpoint = 'https://brugge.mediahaven.com/mediahaven-rest-api/';
+    public $endpoint = 'https://integration.mediahaven.com/mediahaven-rest-api/';
 }
