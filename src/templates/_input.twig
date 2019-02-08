@@ -55,7 +55,7 @@
         object: new {{ jsClass }}({{ jsSettings|json_encode|raw }})
     });
 
-    new initializeMediaHavenField(
+    initializeMediaHavenField(
         {{ jsSettingsMediaHaven|json_encode|raw }}
     );
 {% endjs %}
