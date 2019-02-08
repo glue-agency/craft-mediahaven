@@ -2,6 +2,7 @@
 
 namespace GlueAgency\MediaHaven\Controllers;
 
+use GlueAgency\MediaHaven\MediaHavenField;
 use GlueAgency\MediaHaven\Traits\PreparesAssetForJavascript;
 use craft\elements\Asset;
 use craft\helpers\FileHelper;
@@ -24,21 +25,40 @@ class AssetsController extends Controller
         $title = $request->post('title');
 
         $field = Craft::$app->fields->getFieldById((int) $fieldId);
-        $uploadLocationSource = $field->mediaHavenUploadLocationSource;
-        $folderId = (int) substr(
-            $uploadLocationSource,
-            strpos($uploadLocationSource, ':') + 1
-        );
-        $folder = Craft::$app->assets->getFolderById($folderId);
 
+        $folder = $this->getFolderForField($field);
         $tempFilePath = $this->moveFileToTempFolder($imagePath, $originalFileName);
         $filename = Assets::prepareAssetName($originalFileName);
 
-        $asset = $this->createAsset($tempFilePath, $filename, $title, $folderId, $folder->volumeId);
+        $asset = $this->createAsset($tempFilePath, $filename, $title, $folder);
 
         return $this->asJson($this->prepareAssetForJavascript($asset, [
             'mediaObjectId' => $mediaObjectId
         ]));
+    }
+
+    protected function getFolderForField(MediaHavenField $field)
+    {
+        $assets = Craft::$app->assets;
+        $uploadLocationSource = $field->mediaHavenUploadLocationSource;
+        $uploadLocationSubpath = $field->mediaHavenUploadLocationSubpath;
+
+        $rootFolderId = (int) substr(
+            $uploadLocationSource,
+            strpos($uploadLocationSource, ':') + 1
+        );
+        $rootFolder = $assets->getFolderById($rootFolderId);
+
+        $folderId = $assets->ensureFolderByFullPathAndVolume(
+            $uploadLocationSubpath,
+            $rootFolder->volume
+        );
+
+        if ($rootFolderId == $folderId) {
+            return $rootFolder;
+        }
+
+        return $assets->getFolderById($folderId);
     }
 
     protected function moveFileToTempFolder($url, $filename)
@@ -55,14 +75,14 @@ class AssetsController extends Controller
         return $targetPath;
     }
 
-    protected function createAsset($tempFilePath, $filename, $title, $folderId, $volumeId)
+    protected function createAsset($tempFilePath, $filename, $title, $folder)
     {
         $asset = new Asset();
         $asset->tempFilePath = $tempFilePath;
         $asset->filename = $filename;
         $asset->title = $title;
-        $asset->newFolderId = $folderId;
-        $asset->volumeId = $volumeId;
+        $asset->newFolderId = $folder->id;
+        $asset->volumeId = $folder->volumeId;
         $asset->avoidFilenameConflicts = true;
         $asset->setScenario(Asset::SCENARIO_CREATE);
 
