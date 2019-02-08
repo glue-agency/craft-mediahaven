@@ -76,6 +76,7 @@ class MediaHavenButton extends React.Component {
 
   addSelectedFile = () => {
     const { selectedFile, isAddingFile } = this.state;
+    const { fieldId } = this.props;
 
     if (!selectedFile || isAddingFile) {
       return;
@@ -88,6 +89,7 @@ class MediaHavenButton extends React.Component {
     data.append('mediaObjectId', selectedFile.mediaObjectId);
     data.append('imagePath', selectedFile.previewImagePath);
     data.append('title', selectedFile.title);
+    data.append('fieldId', fieldId);
 
     axios
       .post('/admin/mediahaven/assets', data, {

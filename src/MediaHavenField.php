@@ -15,24 +15,9 @@ class MediaHavenField extends Assets
 
     public $password;
 
-    public $ingestSpaceId;
+    public $mediaHavenUploadLocationSource;
 
-    public $departmentId;
-
-    /**
-     * @inheritdoc
-     */
-    public $useSingleFolder;
-
-    /**
-     * @inheritdoc
-     */
-    public $singleUploadLocationSource;
-
-    /**
-     * @inheritdoc
-     */
-    public $singleUploadLocationSubpath;
+    public $mediaHavenUploadLocationSubpath;
 
     public function init()
     {

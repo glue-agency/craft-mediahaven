@@ -20,17 +20,21 @@ class AssetsController extends Controller
         $originalFileName = $request->post('originalFileName');
         $mediaObjectId = $request->post('mediaObjectId');
         $imagePath = $request->post('imagePath');
+        $fieldId = $request->post('fieldId');
         $title = $request->post('title');
 
-        $tempFilePath = $this->moveFileToTempFolder($imagePath, $originalFileName);
-        $volume = Craft::$app->volumes->getAllVolumes()[0];
-        $filename = Assets::prepareAssetName($originalFileName);
-        $folderId = Craft::$app->assets->ensureFolderByFullPathAndVolume(
-            '',
-            $volume
+        $field = Craft::$app->fields->getFieldById((int) $fieldId);
+        $uploadLocationSource = $field->mediaHavenUploadLocationSource;
+        $folderId = (int) substr(
+            $uploadLocationSource,
+            strpos($uploadLocationSource, ':') + 1
         );
+        $folder = Craft::$app->assets->getFolderById($folderId);
 
-        $asset = $this->createAsset($tempFilePath, $filename, $title, $folderId, $volume->id);
+        $tempFilePath = $this->moveFileToTempFolder($imagePath, $originalFileName);
+        $filename = Assets::prepareAssetName($originalFileName);
+
+        $asset = $this->createAsset($tempFilePath, $filename, $title, $folderId, $folder->volumeId);
 
         return $this->asJson($this->prepareAssetForJavascript($asset, [
             'mediaObjectId' => $mediaObjectId

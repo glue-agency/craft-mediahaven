@@ -1,6 +1,11 @@
+{# Mostly copied from "vendor/craftcms/cms/src/templates/_components/fieldtypes/Assets/settings.html" #}
+
 {% extends "_components/fieldtypes/elementfieldsettings" %}
 
-{% import '_includes/forms' as forms %}
+{% import "_includes/forms" as forms %}
+
+{% set fileKindOptions = field.getFileKindOptions() %}
+{% set isMatrix = 'craft\\fields\\Matrix' in craft.app.view.getNamespace() %}
 
 {% macro uploadLocationInput(name, field, inputSourceOptions) %}
     {% from "_includes/forms" import select, text %}
@@ -27,34 +32,84 @@
 
 {% from _self import uploadLocationInput %}
 
-{% block fieldSettings %}
-    {{ forms.textField({
-        label: 'IngestSpaceId',
-        id: 'ingestSpaceId',
-        name: 'ingestSpaceId',
-        value: settings.ingestSpaceId
-    }) }}
 
-    {{ forms.textField({
-        label: 'DepartmentId',
-        id: 'departmentId',
-        name: 'departmentId',
-        value: settings.departmentId
-    }) }}
+{% block fieldSettings %}
+    <div>
+        {{ forms.field({
+            label: "MediaHaven upload location",
+            instructions: "Where should files be uploaded if they come from MediaHaven.",
+            errors: field.getErrors('singleUploadLocationSubpath')
+        }, uploadLocationInput('mediaHavenUploadLocation', field, sourceOptions)) }}
+    </div>
+
+    <hr>
 
     {% block uploadLocationFields %}
-        {{ forms.hidden({
+        {{ forms.checkboxField({
+            label: "Restrict uploads to a single folder?"|t('app'),
             id: 'useSingleFolder-toggle',
             name: 'useSingleFolder',
+            class: 'use-single-folder-cb',
             value: 1,
+            checked: field.useSingleFolder,
+            toggle: 'single-folder-settings',
+            reverseToggle: 'multi-folder-settings'
         }) }}
 
         {% set uploadLocationNote = "Note that the subfolder path can contain variables like <code>{slug}</code> or <code>{author.username}</code>."|t('app') %}
+        {% if isMatrix %}
+            {% set uploadLocationNote = uploadLocationNote|replace({
+            '{slug}': '{owner.slug}',
+            '{author.username}': '{owner.author.username}'
+            }) %}
+        {% endif %}
 
-        {{ forms.field({
-            label: "Upload Location"|t('app'),
-            instructions: uploadLocationNote,
-            errors: field.getErrors('singleUploadLocationSubpath')
-        }, uploadLocationInput('singleUploadLocation', field, sourceOptions)) }}
+        <div id="multi-folder-settings"{% if field.useSingleFolder %} class="hidden"{% endif %}>
+            {{ block('sourcesField') }}
+
+            {{ forms.field({
+                label: "Default Upload Location"|t('app'),
+                instructions: "Where should files be uploaded when they are dragged directly onto the field, or uploaded from the front end?"|t('app') ~' '~ uploadLocationNote,
+                errors: field.getErrors('defaultUploadLocationSubpath')
+            }, uploadLocationInput('defaultUploadLocation', field, sourceOptions)) }}
+        </div>
+
+        <div id="single-folder-settings"{% if not field.useSingleFolder %} class="hidden"{% endif %}>
+            {{ forms.field({
+                label: "Upload Location"|t('app'),
+                instructions: uploadLocationNote,
+                errors: field.getErrors('singleUploadLocationSubpath')
+            }, uploadLocationInput('singleUploadLocation', field, sourceOptions)) }}
+        </div>
     {% endblock %}
+
+    {% block fileTypesField %}
+        {{ forms.checkboxField({
+            label: "Restrict allowed file types?"|t('app'),
+            class: 'restrictFiles',
+            id: 'restrictFiles',
+            name: 'restrictFiles',
+            value: 1,
+            checked: field.restrictFiles,
+            toggle: 'restrict-allowed-types'
+        }) }}
+
+        <div id="restrict-allowed-types"{% if not field.restrictFiles %} class="hidden indent"{% endif %}>
+            {% for option in fileKindOptions %}
+                {{ forms.checkboxField({
+                    label: option.label,
+                    id: 'allowedKinds-'~option.value,
+                    name: 'allowedKinds[]',
+                    value: option.value,
+                    checked: (option.value in field.allowedKinds)
+                }) }}
+            {% endfor %}
+            {{ forms.errorList(field.getErrors('allowedKinds')) }}
+        </div>
+    {% endblock %}
+
+    {{ block('limitField') }}
+    {{ block('viewModeField') }}
+    {{ block('selectionLabelField') }}
+    {{ block('advancedSettings') }}
 {% endblock %}

@@ -4,7 +4,10 @@ import MediaHavenButton from './MediaHavenButton';
 
 function initializeMediaHavenField(settings) {
   ReactDom.render(
-    <MediaHavenButton assetsFieldId={settings.assetsFieldId} />,
+    <MediaHavenButton
+      assetsFieldId={settings.assetsFieldId}
+      fieldId={settings.fieldId}
+    />,
     document.querySelector(`[data-mediahaven-field-for="${settings.assetsFieldId}"]`)
   );
 }
