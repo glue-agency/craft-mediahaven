@@ -1,12 +1,14 @@
 import React from 'react';
 
 function PendingProgressBar(props) {
+  const { top } = props;
+
   return (
     <div
       className="progressbar has-status pending"
-      style={{ top: '50%' }}
+      style={{ top }}
     >
-      <div className="progressbar-inner" style={{ width: '100%' }}></div>
+      <div className="progressbar-inner"></div>
     </div>
   );
 }

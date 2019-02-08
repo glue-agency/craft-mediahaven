@@ -200,6 +200,13 @@ class View extends React.Component {
 
     return this.removeFilter(filter);
   }
+
+  progressBarTopPosition() {
+    const scrollContainer = this.scrollContainerRef.current || null;
+    const scrollTop = scrollContainer ? scrollContainer.scrollTop : 0;
+
+    return `calc(50% + ${scrollTop}px)`;
+  }
   
   render() {
     const {
@@ -254,7 +261,9 @@ class View extends React.Component {
                   onAddFile={onAddFile}
                 />
               </InfiniteScroll>
-              {isAddingFile && <PendingProgressBar />}
+              {isAddingFile && (
+                <PendingProgressBar top={this.progressBarTopPosition()} />
+              )}
             </div>
           </div>
         )}
