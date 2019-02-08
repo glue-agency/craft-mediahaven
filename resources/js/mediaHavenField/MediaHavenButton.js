@@ -35,12 +35,21 @@ class MediaHavenButton extends React.Component {
   }
 
   addFile(file) {
-    const element = window.$(
-      this.getMediaHavenToCraftConnection().selectedFileElement
-    );
+    const element = this.getMediaHavenToCraftConnection().selectedFileElement;
+
+    element.dataset.imageWidth = file.width;
+    element.dataset.imageHeight = file.height;
+    element.dataset.dataType = 'craft\\elements\\Asset';
+    element.dataset.id = file.id;
+    element.dataset.siteId = file.site_id;
+    element.dataset.status = file.status;
+    element.dataset.label = file.title;
+    element.dataset.url = file.url;
+    element.dataset.level = '';
+    element.dataset.editable = '';
 
     this.getAssetSelectInput().selectElements([{
-      $element: element,
+      $element: window.$(element),
       id: file.id,
       label: file.title,
     }]);

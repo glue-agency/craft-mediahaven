@@ -13,6 +13,11 @@ trait PreparesAssetForJavascript
             'filename' => $asset->filename,
             'title' => $asset->title,
             'thumb' => $asset->getThumbUrl(200),
+            'width' => $asset->width,
+            'height' => $asset->height,
+            'site_id' => $asset->siteId,
+            'status' => $asset->status,
+            'url' => $asset->url,
         ], $extraData);
     }
 }
