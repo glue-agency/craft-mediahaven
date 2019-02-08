@@ -49,10 +49,10 @@
 } %}
 
 {% js %}
-    window.mediaHavenReferences = window.mediaHavenReferences || [];
-    window.mediaHavenReferences.push({
-        key: '{{ jsSettings.id }}',
-        object: new {{ jsClass }}({{ jsSettings|json_encode|raw }})
+    window.mediaHavenToCraftConnections = window.mediaHavenToCraftConnections || [];
+    window.mediaHavenToCraftConnections.push({
+        assetsFieldId: '{{ jsSettingsMediaHaven.assetsFieldId }}',
+        assetSelectInput: new {{ jsClass }}({{ jsSettings|json_encode|raw }})
     });
 
     initializeMediaHavenField(

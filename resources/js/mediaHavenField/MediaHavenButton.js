@@ -36,31 +36,31 @@ class MediaHavenButton extends React.Component {
 
   addFile(file) {
     const element = window.$(
-      this.getMediaHavenReference().selectedFileElement
+      this.getMediaHavenToCraftConnection().selectedFileElement
     );
 
-    this.getAssetField().selectElements([{
+    this.getAssetSelectInput().selectElements([{
       $element: element,
       id: file.id,
       label: file.title,
     }]);
   }
 
-  getAssetField() {
-    return this.getMediaHavenReference().object;
+  getAssetSelectInput() {
+    return this.getMediaHavenToCraftConnection().assetSelectInput;
   }
 
-  getMediaHavenReference() {
-    const { assetFieldId } = this.props;
+  getMediaHavenToCraftConnection() {
+    const { assetsFieldId } = this.props;
 
-    return window.mediaHavenReferences.find((reference) => {
-      return reference.key == assetFieldId;
+    return window.mediaHavenToCraftConnections.find((connection) => {
+      return connection.assetsFieldId == assetsFieldId;
     });
   }
 
   onSelectFile = (selectedFile, selectedFileElement) => {
-    const reference = this.getMediaHavenReference();
-    reference.selectedFileElement = selectedFileElement;
+    const connection = this.getMediaHavenToCraftConnection();
+    connection.selectedFileElement = selectedFileElement;
 
     this.setState({ selectedFile });
   }
