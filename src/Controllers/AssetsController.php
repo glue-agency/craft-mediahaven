@@ -30,7 +30,7 @@ class AssetsController extends Controller
             $volume
         );
 
-        $asset = $this->createAsset($tempFilePath, $filename, $folderId, $volume->id);
+        $asset = $this->createAsset($tempFilePath, $filename, $title, $folderId, $volume->id);
 
         return $this->asJson($this->prepareAssetForJavascript($asset, [
             'mediaObjectId' => $mediaObjectId
@@ -51,11 +51,12 @@ class AssetsController extends Controller
         return $targetPath;
     }
 
-    protected function createAsset($tempFilePath, $filename, $folderId, $volumeId)
+    protected function createAsset($tempFilePath, $filename, $title, $folderId, $volumeId)
     {
         $asset = new Asset();
         $asset->tempFilePath = $tempFilePath;
         $asset->filename = $filename;
+        $asset->title = $title;
         $asset->newFolderId = $folderId;
         $asset->volumeId = $volumeId;
         $asset->avoidFilenameConflicts = true;
