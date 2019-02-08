@@ -11,10 +11,6 @@ class MediaHavenField extends Assets
 {
     use PreparesAssetForJavascript;
 
-    public $username;
-
-    public $password;
-
     public $mediaHavenUploadLocationSource;
 
     public $mediaHavenUploadLocationSubpath;
