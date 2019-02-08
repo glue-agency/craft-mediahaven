@@ -43,22 +43,22 @@ class AssetsController extends Controller
         $uploadLocationSource = $field->mediaHavenUploadLocationSource;
         $uploadLocationSubpath = $field->mediaHavenUploadLocationSubpath;
 
-        $rootFolderId = (int) substr(
+        $rootFolderUid = substr(
             $uploadLocationSource,
             strpos($uploadLocationSource, ':') + 1
         );
-        $rootFolder = $assets->getFolderByUid($rootFolderId);
+        $rootFolder = $assets->getFolderByUid($rootFolderUid);
 
         $folderId = $assets->ensureFolderByFullPathAndVolume(
             $uploadLocationSubpath,
             $rootFolder->volume
         );
 
-        if ($rootFolderId == $folderId) {
+        if ((int) $rootFolder->id == $folderId) {
             return $rootFolder;
         }
 
-        return $assets->getFolderByUid($folderId);
+        return $assets->getFolderById($folderId);
     }
 
     protected function moveFileToTempFolder($url, $filename)
