@@ -27,8 +27,8 @@ class AssetsController extends Controller
         $field = Craft::$app->fields->getFieldById((int) $fieldId);
 
         $folder = $this->getFolderForField($field);
-        $tempFilePath = $this->moveFileToTempFolder($imagePath, $originalFileName);
-        $filename = Assets::prepareAssetName($originalFileName);
+        $filename = Assets::prepareAssetName(basename($imagePath));
+        $tempFilePath = $this->moveFileToTempFolder($imagePath, $filename);
 
         $asset = $this->createAsset($tempFilePath, $filename, $title, $folder);
 
