@@ -8,6 +8,7 @@ use craft\events\RegisterUrlRulesEvent;
 use craft\services\Fields;
 use craft\web\UrlManager;
 use yii\base\Event;
+use Craft;
 
 class Plugin extends \craft\base\Plugin
 {
@@ -15,6 +16,8 @@ class Plugin extends \craft\base\Plugin
 
     public function init()
     {
+        Craft::setAlias('@/GlueAgency/MediaHaven', __DIR__);
+
         parent::init();
 
         Event::on(
