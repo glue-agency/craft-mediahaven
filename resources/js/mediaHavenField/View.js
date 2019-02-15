@@ -7,6 +7,7 @@ import buildQueryString from './buildQueryString';
 import Facet from './Facet';
 import CollectionSelect from './CollectionSelect';
 import SearchFilter from './Filters/Search';
+import MediaTypeFilter from './Filters/MediaType';
 import CollectionFilter from './Filters/Collection';
 import FacetValueFilter from './Filters/FacetValue';
 import signature from './Filters/signature';
@@ -34,6 +35,7 @@ class View extends React.Component {
           this.setState({ search: '' });
         }),
         new CollectionFilter('collection'),
+        new MediaTypeFilter('mediaType', 'image'),
       ],
       filesOffset: 0,
       totalNumberOfFiles: null,
