@@ -35,6 +35,7 @@ class MediaHavenButton extends React.Component {
   }
 
   addFile(file) {
+    const { viewMode } = this.props;
     const element = this.getMediaHavenToCraftConnection().selectedFileElement;
 
     element.dataset.imageWidth = file.width;
@@ -52,6 +53,7 @@ class MediaHavenButton extends React.Component {
       $element: window.$(element),
       id: file.id,
       label: file.title,
+      viewMode: viewMode,
     }]);
   }
 

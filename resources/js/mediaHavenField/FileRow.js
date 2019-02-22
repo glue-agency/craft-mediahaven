@@ -21,7 +21,7 @@ function FileRow(props) {
       <td>
         <div className="element small hasthumb" ref={elementDiv}>
           <div className="elementthumb">
-            <img src={file.thumbnailImagePath} alt="" />
+            <img srcset={file.thumbnailImagePath} alt="" />
           </div>
           <div className="label">
             {file.title}

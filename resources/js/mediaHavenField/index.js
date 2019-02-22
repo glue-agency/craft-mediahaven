@@ -7,6 +7,7 @@ function initializeMediaHavenField(settings) {
     <MediaHavenButton
       assetsFieldId={settings.assetsFieldId}
       fieldId={settings.fieldId}
+      viewMode={settings.viewMode}
     />,
     document.querySelector(`[data-mediahaven-field-for="${settings.assetsFieldId}"]`)
   );
