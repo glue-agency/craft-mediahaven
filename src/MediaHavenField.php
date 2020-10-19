@@ -32,6 +32,7 @@ class MediaHavenField extends Assets
             'mediahaven/_settings', [
                 'field' => $this,
                 'settings' => $this->settings,
+                'pluralElementType' => "Assets",
             ]
         );
     }
