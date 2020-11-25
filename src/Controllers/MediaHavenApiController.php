@@ -22,7 +22,7 @@ class MediaHavenApiController extends Controller
         $request = Craft::$app->request;
         $queryString = $request->queryString;
 
-        $guzzleResponse = $client->request('GET', "${endpoint}?${queryString}");
+        $guzzleResponse = $client->request('GET', "${endpoint}?${queryString}", ['connect_timeout' => 15]);
 
         $response = Craft::$app->response;
         $response->format = Response::FORMAT_JSON;
